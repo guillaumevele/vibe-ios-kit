@@ -1,2 +1,6 @@
 .DS_Store
 *.air
+*.metallib
+__pycache__/
+*.pyc
+.pytest_cache/
