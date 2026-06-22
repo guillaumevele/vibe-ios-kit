@@ -12,8 +12,12 @@ It enforces the rules a static check can enforce HONESTLY, in two tiers:
   tier 2 (WARN; FAIL with --strict) — needs a heuristic: an ungated
                             `TimelineView(.animation)` / `.repeatForever`.
 
-It does NOT pretend to catch everything — see `--help`/README "what it cannot
-catch". Runtime CPU, off-screen `Canvas` redraws, and the 3-minute idle soak
+It does NOT pretend to catch everything. The tier-2 rule is a token-PRESENCE
+heuristic, not a proof of a gating relationship: it flags a continuous animation
+when NO guard token and no Bool/Binding parameter is present in the enclosing
+view. So it catches the *naive ungated* form, but a guard token that gates a
+different view in the same type will suppress the warning (a possible false
+negative). Runtime CPU, off-screen `Canvas` redraws, and the 3-minute idle soak
 (AGENTS.md §1) are not statically decidable and remain your gate.
 
 Zero dependencies (stdlib only).
@@ -21,6 +25,7 @@ Zero dependencies (stdlib only).
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -34,11 +39,25 @@ _EMOJI_RANGES = [
     (0x1F1E6, 0x1F1FF),  # regional indicators (flags)
     (0xFE00, 0xFE0F),    # variation selectors (emoji presentation)
 ]
+# A few emoji that live outside the ranges above (stars, squares) but are clearly
+# not punctuation. Listed explicitly so we don't pull in the arrows next to them.
+_EMOJI_SINGLES = frozenset({0x2B50, 0x2B55, 0x2B1B, 0x2B1C, 0x303D, 0x3030})
 
 _GUARD_TOKENS = (
     "scenePhase", "isEnabled", "reduceMotion", "accessibilityReduceMotion",
     "onDisappear", "isAnimating", "isVisible", "isActive", "paused",
 )
+# Whole-word guard tokens (so `isActiveSubscription` does NOT match `isActive`),
+# plus a parameter-gate signal: a view that takes a Bool/Binding is plausibly
+# gated by its caller, so we do not flag its animations (avoids false positives
+# on idiomatic decomposed/leaf views).
+_GUARD_RE = re.compile(r"\b(" + "|".join(_GUARD_TOKENS) + r")\b")
+_PARAM_GATE_RE = re.compile(r":\s*Bool\b|Binding\s*<")
+# Triggers as regex so multi-line / reformatted calls are not silently missed.
+_TRIGGERS = [
+    ("TimelineView(.animation)", re.compile(r"TimelineView\s*\(\s*\.animation\b")),
+    (".repeatForever(...)", re.compile(r"\.repeatForever\s*\(")),
+]
 
 
 class Finding:
@@ -57,7 +76,49 @@ def _lineno(text: str, idx: int) -> int:
 
 def _is_emoji(ch: str) -> bool:
     cp = ord(ch)
-    return any(lo <= cp <= hi for lo, hi in _EMOJI_RANGES)
+    return cp in _EMOJI_SINGLES or any(lo <= cp <= hi for lo, hi in _EMOJI_RANGES)
+
+
+def _blank_noncode(text: str) -> str:
+    """Replace the CONTENTS of // comments, /* */ comments, and "..." strings
+    with spaces, preserving length and newlines (so offsets/line numbers stay
+    valid). Guard/trigger scanning runs on this so a token in a comment or string
+    can neither suppress a warning (false negative) nor trigger one."""
+    out = list(text)
+    i, n, state = 0, len(text), None
+    while i < n:
+        c = text[i]
+        nxt = text[i + 1] if i + 1 < n else ""
+        if state is None:
+            if c == "/" and nxt == "/":
+                state, out[i], out[i + 1] = "line", " ", " "
+                i += 2; continue
+            if c == "/" and nxt == "*":
+                state, out[i], out[i + 1] = "block", " ", " "
+                i += 2; continue
+            if c == '"':
+                state = "str"
+            i += 1; continue
+        if state == "line":
+            if c == "\n":
+                state = None
+            else:
+                out[i] = " "
+        elif state == "block":
+            if c == "*" and nxt == "/":
+                state, out[i], out[i + 1] = None, " ", " "
+                i += 2; continue
+            if c != "\n":
+                out[i] = " "
+        elif state == "str":
+            if c == "\\":
+                i += 2; continue
+            if c == '"':
+                state = None
+            elif c != "\n":
+                out[i] = " "
+        i += 1
+    return "".join(out)
 
 
 def _match_block(text: str, brace_idx: int) -> int:
@@ -96,61 +157,82 @@ def _enclosing_type_body(text: str, idx: int) -> str:
 
 def lint_text(path: str, text: str) -> list[Finding]:
     findings: list[Finding] = []
+    code = _blank_noncode(text)  # comments/strings blanked; offsets preserved
 
-    # tier 1 — emoji in source
+    # tier 1 — emoji anywhere in the raw source (comments included).
     for i, ch in enumerate(text):
         if _is_emoji(ch):
             findings.append(Finding(path, _lineno(text, i), 1,
                                     f"emoji {ch!r} in source", "§6"))
 
-    # tier 1 — @unchecked Sendable without a stated invariant
-    needle = "@unchecked Sendable"
+    # tier 1 — @unchecked Sendable without a stated invariant (scan raw text so
+    # the // invariant: note in a comment counts; walk back over the full
+    # contiguous leading comment block, not a fixed 2-line window).
     pos = 0
     while True:
-        k = text.find(needle, pos)
+        k = text.find("@unchecked Sendable", pos)
         if k == -1:
             break
-        line_start = text.rfind("\n", 0, k) + 1
-        prev_start = text.rfind("\n", 0, line_start - 1) + 1 if line_start else 0
-        window = text[prev_start:text.find("\n", k) if text.find("\n", k) != -1 else len(text)]
-        if "invariant" not in window.lower():
+        if not _has_invariant_note(text, k):
             findings.append(Finding(path, _lineno(text, k), 1,
                                     "@unchecked Sendable without an // invariant: note", "§2"))
-        pos = k + len(needle)
+        pos = k + len("@unchecked Sendable")
 
-    # tier 1 — formatter allocation inside a `var body`
+    # tier 1 — formatter allocation inside a `var body` (on blanked code, so a
+    # formatter named in a comment does not count).
     bpos = 0
     while True:
-        b = text.find("var body", bpos)
+        b = code.find("var body", bpos)
         if b == -1:
             break
-        brace = text.find("{", b)
+        brace = code.find("{", b)
         if brace == -1:
             break
-        end = _match_block(text, brace)
-        block = text[brace:end]
+        end = _match_block(code, brace)
         for formatter in ("DateFormatter(", "NumberFormatter("):
-            j = block.find(formatter)
+            j = code.find(formatter, brace, end)
             if j != -1:
-                findings.append(Finding(path, _lineno(text, brace + j), 1,
+                findings.append(Finding(path, _lineno(text, j), 1,
                                         f"{formatter}) allocated inside a body", "§3"))
         bpos = end
 
-    # tier 2 — ungated continuous animation
-    for trigger in ("TimelineView(.animation", ".repeatForever("):
-        pos = 0
-        while True:
-            k = text.find(trigger, pos)
-            if k == -1:
-                break
-            scope = _enclosing_type_body(text, k) or text
-            if not any(tok in scope for tok in _GUARD_TOKENS):
-                findings.append(Finding(path, _lineno(text, k), 2,
-                                        f"ungated {trigger} — no visibility/active guard "
-                                        "in the enclosing view", "§1"))
-            pos = k + len(trigger)
+    # tier 2 — ungated continuous animation. A warning is suppressed when the
+    # enclosing type carries a whole-word guard token OR takes a Bool/Binding
+    # (parameter-gated). This is a token-PRESENCE heuristic, not a proof of a
+    # gating relationship — see the module docstring's limitations.
+    for label, pattern in _TRIGGERS:
+        for m in pattern.finditer(code):
+            scope = _enclosing_type_body(code, m.start()) or code
+            if _GUARD_RE.search(scope) or _PARAM_GATE_RE.search(scope):
+                continue
+            findings.append(Finding(path, _lineno(text, m.start()), 2,
+                                    f"ungated {label} — no visibility/active guard "
+                                    "in the enclosing view", "§1"))
 
     return findings
+
+
+def _has_invariant_note(text: str, k: int) -> bool:
+    """True if 'invariant' appears on the same line as index k or anywhere in the
+    contiguous block of comment lines immediately above it."""
+    line_end = text.find("\n", k)
+    line_end = line_end if line_end != -1 else len(text)
+    line_start = text.rfind("\n", 0, k) + 1
+    if "invariant" in text[line_start:line_end].lower():
+        return True
+    # walk upward over contiguous comment lines
+    cursor = line_start
+    while cursor > 0:
+        prev_end = cursor - 1
+        prev_start = text.rfind("\n", 0, prev_end) + 1
+        line = text[prev_start:prev_end]
+        if line.lstrip().startswith(("//", "/*", "*")):
+            if "invariant" in line.lower():
+                return True
+            cursor = prev_start
+        else:
+            break
+    return False
 
 
 def _swift_files(targets: list[str]) -> list[Path]:
@@ -165,6 +247,11 @@ def _swift_files(targets: list[str]) -> list[Path]:
 
 
 def run(targets: list[str], strict: bool) -> int:
+    missing = [t for t in targets if not Path(t).exists()]
+    if missing:
+        # A typo'd path must not pass green by scanning nothing.
+        print(f"vibe-ios-doctor: path(s) not found: {', '.join(missing)}", file=sys.stderr)
+        return 2
     files = _swift_files(targets)
     if not files:
         print("vibe-ios-doctor: no .swift files found", file=sys.stderr)

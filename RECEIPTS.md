@@ -41,9 +41,12 @@ Maps directly to **AGENTS.md §1**: no ungated `TimelineView(.animation)` / no
 ungated `.repeatForever`; cap the frame rate (120 fps buys nothing for a halo);
 pause off screen; and gate the whole thing behind a 3-minute idle-CPU soak.
 
-`vibe-ios-doctor` flags exactly this pattern statically (an ungated
-`TimelineView(.animation)` with no visibility/active guard in the enclosing
-view) — see the tier-2 rule.
+`vibe-ios-doctor` flags the **naive ungated form** of this statically — an
+`TimelineView(.animation)` / `.repeatForever` with no guard token and no
+Bool/Binding gate in the enclosing view. It is a token-presence heuristic, not a
+proof of the gating relationship (a guard token that gates a *different* view in
+the same type can suppress it), so it is a gate, not a guarantee — the 3-minute
+device soak above is the real proof.
 
 ## The numbers, qualified honestly
 

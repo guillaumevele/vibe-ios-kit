@@ -11,7 +11,8 @@ one bug that ships: **an ungated `TimelineView(.animation)` that pins a CPU core
 and drains the battery** — the most common SwiftUI production fault (see
 [RECEIPTS.md](RECEIPTS.md) for the real `bug_type 202` incident this is distilled
 from). `vibe-ios-kit` makes the rule that bans it a *standing instruction*, and
-ships a **runnable lint that proves it** — not a scaffolder you have to trust.
+ships a **runnable lint that gates the naive form** — not a scaffolder you have to
+trust.
 
 ---
 
@@ -46,9 +47,12 @@ to catch real violations *and* to stay green on this kit's own templates — the
 naive grep version false-positives on correct gated code, so the gating rule uses
 a brace-window heuristic, not a bare grep.
 
-**What it cannot catch** (and does not pretend to): runtime CPU, off-screen
-`Canvas` redraws, and the 3-minute idle-CPU soak (AGENTS.md §1). Those are not
-statically decidable and remain a manual/device gate.
+**What it cannot catch** (and does not pretend to): the tier-2 rule is a
+token-presence heuristic — it flags an animation with *no* guard token in the
+view, so a guard token that gates a different view in the same type can suppress
+it (a possible false negative). And runtime CPU, off-screen `Canvas` redraws, and
+the 3-minute idle-CPU soak (AGENTS.md §1) are not statically decidable. Those
+remain a manual/device gate.
 
 ## Install
 
