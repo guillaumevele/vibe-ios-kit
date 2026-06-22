@@ -1,0 +1,13 @@
+# vibe custom agent: iOS / SwiftUI / Metal builder.
+# Install: copy or symlink this file into ~/.vibe/agents/ios.toml
+# Use:     vibe --agent ios
+#
+# The domain posture (CPU budget, Swift 6 concurrency, gated Metal, premium
+# aesthetic, proof-not-vibes) lives in AGENTS.md at the project root — vibe loads
+# it automatically, so it layers on top of vibe's own system prompt instead of
+# replacing it. This profile just gives the posture a named, selectable identity.
+
+display_name = "iOS Builder"
+description = "Build premium iOS 26/27 apps: SwiftUI, real gated Metal shaders, Swift 6 strict concurrency. Edits surgically and proves results on a real build."
+safety = "neutral"
+agent_type = "agent"
