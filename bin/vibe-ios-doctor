@@ -258,7 +258,14 @@ def run(targets: list[str], strict: bool) -> int:
         return 0
     all_findings: list[Finding] = []
     for f in files:
-        all_findings.extend(lint_text(str(f), f.read_text(encoding="utf-8")))
+        try:
+            # Real codebases contain the odd non-UTF-8 file; never crash the whole
+            # run over one — decode leniently and keep going.
+            text = f.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            print(f"vibe-ios-doctor: skipped {f}: {exc}", file=sys.stderr)
+            continue
+        all_findings.extend(lint_text(str(f), text))
 
     fails = [x for x in all_findings if x.tier == 1]
     warns = [x for x in all_findings if x.tier == 2]

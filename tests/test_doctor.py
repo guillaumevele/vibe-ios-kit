@@ -104,5 +104,12 @@ def test_run_exits_2_on_missing_path():
     assert doctor.run(["/no/such/path/Sources"], strict=False) == 2
 
 
+def test_run_survives_non_utf8_file(tmp_path):
+    # Real codebases contain the odd non-UTF-8 byte; the run must not crash.
+    bad = tmp_path / "Weird.swift"
+    bad.write_bytes(b"struct V {}\n// caf\xe9 latin-1 byte\n")
+    assert doctor.run([str(tmp_path)], strict=False) == 0
+
+
 def test_run_clean_on_templates():
     assert doctor.run([str(_ROOT / "templates")], strict=True) == 0
