@@ -13,8 +13,9 @@ echo
 echo "Use it:"
 echo "  vibe --agent ios"
 echo
-echo "Per project, copy the posture and templates into the project root:"
+echo "Per project, copy the posture, patterns and templates into the project root:"
 echo "  cp ${KIT_DIR}/AGENTS.md       /path/to/YourApp/AGENTS.md"
+echo "  cp ${KIT_DIR}/PATTERNS.md     /path/to/YourApp/PATTERNS.md"
 echo "  cp ${KIT_DIR}/templates/*     /path/to/YourApp/Sources/"
 echo
 echo "For surgical, agent-invoked Swift edits (recommended):"

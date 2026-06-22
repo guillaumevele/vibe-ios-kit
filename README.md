@@ -21,7 +21,8 @@ trust.
 | File | What it is | Status |
 |---|---|---|
 | `bin/vibe-ios-doctor` | A runnable gate that enforces the posture: emoji in code, `@unchecked Sendable` without a stated invariant, formatter allocs in a body (FAIL), ungated continuous animations (WARN/`--strict`). | **executable; CI-gated; tested** |
-| `AGENTS.md` | The build posture: CPU budget, Swift 6 concurrency, gated Metal, premium aesthetic, proof-not-vibes. `vibe` auto-loads it at a project root. | validated (loads, layers on vibe's prompt) |
+| `AGENTS.md` | The build posture: CPU budget, Swift 6 concurrency, gated Metal, premium aesthetic, proof-not-vibes, iOS 26/AI non-negotiables. `vibe` auto-loads it at a project root. | validated (loads, layers on vibe's prompt) |
+| `PATTERNS.md` | 38 distilled iOS 26/27 techniques (FoundationModels, real Metal, Liquid Glass, navigation, motion, StoreKit) — APIs + gotcha + example + attribution, mined from 67 real projects. | license-clean (techniques, not copied code) |
 | `agents/ios.toml` | A custom `vibe` agent (`vibe --agent ios`) that raises the bash timeout to 1200s for slow `xcodebuild`s. | validated (loads & runs) |
 | `skills/ios-surgical-edit.md` | The agent edits Swift via [`vibe-fim`](https://pypi.org/project/vibe-fim/)'s MCP tool, so changes are bounded — the rest of a working file stays byte-identical. | validated (vibe-fim published & tested) |
 | `templates/Sheen.metal` | A real `[[stitchable]]` color effect; `time` is a Swift-owned uniform you can freeze. | **compiles to metallib** (`xcrun -sdk iphoneos`) |

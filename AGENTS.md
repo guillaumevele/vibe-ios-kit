@@ -23,8 +23,11 @@ looks intentional. Everything below is a hard rule unless the human overrides it
 
 ## 1. CPU budget — the runaway class (most common production bug)
 
-A single unguarded animation can pin a core and drain the battery. These are
-**banned** unless explicitly gated:
+A single unguarded animation can pin a core and drain the battery. This is the
+**single most-violated rule in real code**: across 36 `TimelineView` shader files
+mined from 67 production sample projects, exactly **1** used `scenePhase`, **0**
+used `isLowPowerModeEnabled`, **0** used `accessibilityReduceMotion`
+(see `PATTERNS.md`). These are **banned** unless explicitly gated:
 
 - `TimelineView(.animation)` driving work every frame with no stop condition.
 - `.repeatForever(autoreverses:)` that is not tied to `isEnabled` / visibility.
@@ -100,3 +103,37 @@ rest, it is a bug, not a polish item.
 
 A change is done when: it builds, it runs, the CPU-at-rest gate passes, reduced
 motion is handled, there are no emoji, and you have stated the proof you saw.
+
+## 9. On-device AI & iOS 26 system UI (corpus-validated)
+
+Non-negotiables distilled from 67 real projects. Deeper, attributed techniques
+with examples live in **`PATTERNS.md`** — consult it before building any of these.
+
+- **FoundationModels is the privacy-aligned default.** Inference stays on-device;
+  treat `SystemLanguageModel.default.availability` as a *product state* (branch
+  the whole view to a `ContentUnavailableView` per `.unavailable` reason, with an
+  `@unknown default`), re-read it (it changes at runtime). **Never** silently fall
+  back to a server LLM or Private Cloud Compute — any off-device escalation is an
+  explicit, labelled user opt-in. For structured output use `@Generable` with
+  **closed enums** so the model cannot invent categories. Streaming snapshots are
+  **cumulative** — `output = snap.content` (assign, never append). Trust the SDK
+  spelling (`@Guide(description:)` on a property, `call(arguments:)`), not the
+  bundled SKILL.md tutorials, which ship stale forms that do not compile.
+- **iOS 26 glass is native and cheap.** Use `.glassEffect(.regular, in:)` in a
+  `GlassEffectContainer`; never hand-roll fake glass via per-frame snapshot + blur
+  over scrolling content (the canonical material-over-scroll trap). Ship a pre-26
+  fallback behind `if #available(iOS 26)`. Keep glass on small surfaces only.
+- **Scroll/size reads:** prefer `onScrollGeometryChange` / `onGeometryChange`
+  (change-driven) over `GeometryReader` + `PreferenceKey` (frame-driven). Return a
+  `Bool` for crossing detection so work fires once, not every frame.
+- **Drag against a ScrollView:** bridge `UIGestureRecognizerRepresentable` + a
+  delegate — a SwiftUI `DragGesture` silently drops `.onEnded` when it loses the
+  gesture race, the root cause of stuck mid-dismiss animations.
+- **Stitchable shaders fail SILENTLY** (name-resolved at runtime): a typo or
+  arg-count mismatch yields a blank layer with no error. Pass `size` explicitly to
+  `.colorEffect`; pick the right entry point (`colorEffect` / `distortionEffect` /
+  `layerEffect`). Verify the effect visually, never assume it bound.
+- **Let the platform own the hard parts:** `SubscriptionStoreView` for paywalls
+  (verify `VerificationResult` before unlocking); `Text(timerInterval:)` for Live
+  Activity time (advances natively at zero CPU — never a per-second update loop);
+  keep the native `TabView` and overlay custom chrome rather than hand-rolling.
