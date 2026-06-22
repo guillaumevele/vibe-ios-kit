@@ -137,3 +137,126 @@ with examples live in **`PATTERNS.md`** — consult it before building any of th
   (verify `VerificationResult` before unlocking); `Text(timerInterval:)` for Live
   Activity time (advances natively at zero CPU — never a per-second update loop);
   keep the native `TabView` and overlay custom chrome rather than hand-rolling.
+
+## 10. Camera / scan / sensor features — fixture-prove, don't beg for a face
+
+The single most-lost thread on a camera app: the Simulator has no camera, a flat
+photo is not a sensor, so the agent keeps saying **"go stand in front of your
+phone"**, blocks, and loses work. That is banned. Put a **debug capture seam** in
+the pipeline (a `CaptureSource` protocol with a `FixtureCaptureSource`) so the
+inner loop runs against a bundled fixture — deterministic, no camera, no human —
+and reserve the real camera for ONE final acceptance pass. The full seam, the
+honest fakeable/replayable/not table, and the test harness are in
+**`patterns/FIXTURE-CAPTURE.md`** — read it before building any capture feature.
+
+The hard rules:
+
+- **F1 — Inner loop = fixture, never the human.** For any camera/scan/sensor
+  feature, drive iteration through `FixtureCaptureSource` + the fixture XCTest
+  harness on the **Simulator** (the owner's stack: `xcodebuild test` /
+  XcodeBuildMCP). NEVER ask the human to run a scan to check your own work in
+  progress. If you catch yourself about to write "stand in front of the phone"
+  mid-iteration, stop and write a fixture test instead.
+
+- **F2 — Be honest about what a fixture can drive (the table is law).** A flat RGB
+  photo drives the **vision path only** (`VNImageRequestHandler` and friends — face
+  detection, capture-quality, RGB/redness). The **depth path** needs a *recorded
+  RGBD asset* replayed (`AVDepthData(fromDictionaryRepresentation:)` from a HEIC's
+  disparity aux channel) — it is NOT derivable from a flat photo. **ARKit face
+  tracking and the live TrueDepth/LiDAR sensor are NOT fakeable at all.** Never
+  report a depth/relief/mesh number from a flat fixture; that is a §0 violation.
+  Synthetic depth is allowed only to prove plumbing, and only when labelled as
+  such — it never yields a clinical number.
+
+- **F3 — Real camera = ONE acceptance pass, asked once, with a checklist.** The
+  real device is the LAST gate, not the inner loop. When the fixture loop is green,
+  ask the human a single time, via MobAI on the real iPhone, with an explicit
+  checklist of exactly what only the sensor can prove, e.g.:
+  - [ ] Live scan completes on the real TrueDepth camera (no fixture).
+  - [ ] Depth-derived result (relief/mesh) is plausible on a real face at arm's length.
+  - [ ] Capture-quality gate behaves under real lighting (bright / dim / backlit).
+  - [ ] 3-minute on-device idle-CPU soak passes (AGENTS.md §1) during/after scan.
+
+  One ask, one checklist — not a stream of "try it now?" interruptions.
+
+- **F4 — Small fixture-proved steps, each with a written checkpoint.** Structure
+  the work so a lost thread loses ONE step, not the session. After each step:
+  (1) state which fixture test now passes, (2) write a one-line checkpoint —
+  `done: <step>; proof: <test/result>; next: <step>` — to the PR/scratch notes.
+  A fresh session resumes from the last checkpoint, not from zero. (Pairs with the
+  surgical-edit discipline §7: small bounded edits, each independently proved.)
+
+- **F5 — No "scan works" claim without a proof token.** You may only say a scan or
+  capture feature works if you attach one of: a **fixture-test run** (names the
+  test + the asserted output) for the fakeable/replayable rows, OR a **stated
+  real-device acceptance** (the human confirmed the F3 checklist) for the
+  not-fakeable rows. "It builds" / "it should work" is not a proof token (§0).
+  Match the proof to the row: a fixture test does NOT prove the ARKit/sensor path.
+
+- **F6 — Branch on capability, don't assume it.** The pipeline reads `sourceKind`
+  / `depth == nil` and degrades honestly when depth is absent (same posture as the
+  FoundationModels availability gate in §9): a missing-depth path is a normal
+  product state to handle, not a crash and not a silently-faked number.
+
+- **F7 — The fixture seam never ships.** Gate `FixtureCaptureSource` and its
+  selector behind `#if DEBUG`; the Release composition root compiles only
+  `LiveCameraSource`. A fixture must be impossible to load in a shipped build.
+
+## 11. Rendered UI — snapshot and SEE it, don't claim it looks right
+
+The visual analogue of §10. You cannot see the running app, so for a premium UI you
+keep *saying* a screen "looks right" without ever looking — and the design drifts:
+a default-blue button slips in, spacing goes off-scale, an emoji appears, a token
+changes. On a hard app this is where the thread and the work get lost. The fix is a
+**snapshot seam**: render the view to a PNG, then **read that PNG back with your
+vision tool** and check it. The full mechanism, the verified-API table, the loop and
+the checklist are in **`patterns/VISUAL-VERIFY.md`** (kit templates
+`VisualSnapshot.swift` + `SnapshotHarness.swift`) — read it before any UI change.
+
+The hard rules:
+
+- **V1 — Every UI change runs the five-step loop.** (a) build the view, (b) snapshot
+  it (`SnapshotHarness` via `ImageRenderer` for static design; `simctl io booted
+  screenshot` / a `XCUIScreen.screenshot()` UI test for live shaders & `.glassEffect`),
+  (c) **read the PNG back with the vision tool and run the §4 checklist on what you
+  SEE**, (d) diff against the golden if one exists, (e) write a checkpoint. "Compiles"
+  is step (a) only — necessary, never sufficient (§0).
+
+- **V2 — Never claim a screen looks right without a captured screenshot you actually
+  opened.** A captured-but-unread PNG is not verification. State the verdict as
+  `VISUAL_VERIFIED name=<png> pass=<yes/no> notes=<…>`; if you did not open the
+  image, say "unverified — owed a visual read", do not imply you saw it.
+
+- **V3 — Match the mechanism to what you're verifying.** `ImageRenderer` rasterizes
+  the layer tree: it captures layout / spacing / color tokens / type / SF Symbols /
+  emoji / light+dark, and it is fast and CI-able. It does **NOT** run live Metal
+  shaders or iOS 26 `.glassEffect` refraction, and it renders at the scale you set,
+  not device `@2x/@3x`. Verifying a glass/shader screen via `ImageRenderer` is a §0
+  lie — that PNG never had the effect in it. Snapshot the *running app* for those.
+
+- **V4 — The no-emoji + token check is mandatory on every snapshot.** Read the image
+  and confirm: no emoji; the primary action uses the token style (accent / corner /
+  padding), not default-blue; one accent; spacing on the scale; nothing clipped.
+  These are §6 made checkable — a strong model still slips an emoji or a stock button
+  in, and only looking at the pixels catches it.
+
+- **V5 — Goldens are a regression net, blessed by a human-grade decision.** Commit a
+  reference PNG under `Goldens/<name>.png` only AFTER it passed the §4 read. The
+  harness then asserts `GoldenDiff` mean-abs-diff ≤ tolerance (default 0.02, AA-tolerant)
+  on every run. A failing diff is a regression to fix OR an intended change to
+  **re-bless** (delete + recommit) — never silently ignored. Diff only same-mechanism,
+  same-scale candidates; a scale-1 golden vs a device shot is a mismatch, not a bug.
+
+- **V6 — Small verified steps, each with a written checkpoint** (mirrors §10 F4, ties
+  to the lost-thread pain). One component, one snapshot, one read, one checkpoint
+  line — `done: <view>; proof: <png + VISUAL_VERIFIED/GOLDEN_DIFF>; next: <view>` —
+  in the PR/scratch notes. A fresh session resumes from the last verified screen, not
+  from zero. Pairs with surgical edits (§7): bounded change, captured proof.
+
+- **V7 — Honest limits, stated, not papered over.** `ImageRenderer` ≠ on-device
+  rendering; a model reading a screenshot is a judgment, not a proof; the running-app
+  screenshot is only as deterministic as the app state you pinned. So a **final
+  real-device visual pass is still wise once** before shipping (real glass, real
+  scale, Dynamic Type, safe areas, motion at speed) — asked once, per §10 F3 style.
+  The snapshot loop is what lets you reach that pass already correct after many honest
+  iterations; it does not replace it.

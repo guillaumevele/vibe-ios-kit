@@ -1,0 +1,12 @@
+{
+  "_comment": "The fixture corpus manifest. `ScanFixtureTests.test_corpusSweep_...` reads this and runs the per-fixture invariants for every entry, so adding a face fixture is a one-line edit here + dropping the asset in the test bundle. `resource` is the bundled file's base name (no extension; FixtureSource probes png/jpg/jpeg/heic). `fitzpatrick` (I–VI) keeps the corpus honest across skin tones — a redness/a* metric that only works on Fitz II-III is a known failure mode (see verdict-app derm-eval). Keep at least one fixture per Fitzpatrick band you ship to.",
+  "rgbFixtures": [
+    { "resource": "neutral_fitz2_front", "fitzpatrick": 2, "note": "well-lit, frontal, neutral expression — the baseline golden" },
+    { "resource": "neutral_fitz3_front", "fitzpatrick": 3, "note": "the worked example in ScanFixtureTests + Goldens/" },
+    { "resource": "neutral_fitz5_front", "fitzpatrick": 5, "note": "darker skin — guards against a metric tuned only on light skin" },
+    { "resource": "offaxis_fitz3_front", "fitzpatrick": 3, "note": "head turned ~20deg — lower capture-quality, still a valid face" }
+  ],
+  "rgbdFixtures": [
+    { "resource": "neutral_fitz3_truedepth", "fitzpatrick": 3, "note": "RECORDED on a real TrueDepth front camera; carries a real disparity aux channel. Large file — gitignore it or LFS it; the depth test XCTSkips when absent." }
+  ]
+}

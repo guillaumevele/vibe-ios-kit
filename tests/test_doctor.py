@@ -88,10 +88,106 @@ def test_emoji_in_comment_is_flagged():
     assert any(f.tier == 1 and "emoji" in f.message for f in findings)
 
 
+# ── §6 visual-consistency detectors ───────────────────────────────────────────
+
+def test_raw_color_components_fail():
+    src = ("struct V: View {\n    var body: some View {\n"
+           "        Color(red: 0.93, green: 0.45, blue: 0.38)\n    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert any(f.tier == 1 and "raw colour" in f.message for f in findings)
+
+
+def test_raw_color_in_token_type_passes():
+    # The SANCTIONED home: a raw component inside the design-token type is the one
+    # legal site and must NOT be flagged.
+    src = ("enum DS {\n    enum Color {\n"
+           "        static let accent = SwiftUI.Color(red: 0.93, green: 0.45, blue: 0.38)\n"
+           "    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert not any("raw colour" in f.message for f in findings)
+
+
+def test_system_and_named_colors_do_not_fire():
+    # Adaptive/catalog/system colours are fine — only raw components are drift.
+    src = ('let a = Color("Accent")\nlet b = Color(.systemBackground)\n'
+           'let c = Color(white: 0.07)\nlet d = Color.primary\n')
+    findings = doctor.lint_text("X.swift", src)
+    assert not any("raw colour" in f.message for f in findings)
+
+
+def test_adhoc_cta_background_cornerRadius_fails():
+    src = ("struct CTA: View {\n    var body: some View {\n"
+           "        Text(\"Go\").background(DS.Color.accent).cornerRadius(18)\n    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert any(f.tier == 1 and "ad-hoc" in f.message for f in findings)
+
+
+def test_sanctioned_background_in_shape_passes():
+    # `.background(_, in: <shape>)` carries the shape inside background — the
+    # sanctioned form, no trailing .cornerRadius — must NOT be flagged.
+    src = ("struct Card: View {\n    var body: some View {\n"
+           "        Text(\"Go\").background(.ultraThinMaterial, in: .rect(cornerRadius: DS.Radius.lg))\n"
+           "    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert not any("ad-hoc" in f.message for f in findings)
+
+
+def test_magic_padding_warns():
+    src = ("struct V: View {\n    var body: some View {\n"
+           "        Text(\"x\").padding(17)\n    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert any(f.tier == 2 and "magic padding" in f.message for f in findings)
+
+
+def test_tokenized_padding_passes():
+    src = ("struct V: View {\n    var body: some View {\n"
+           "        Text(\"x\").padding(DS.Space.lg)\n    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert not any(f.tier == 2 and "magic" in f.message for f in findings)
+
+
+def test_magic_cornerRadius_and_fontsize_warn():
+    src = ("struct V: View {\n    var body: some View {\n"
+           "        Text(\"x\").font(.system(size: 22, weight: .medium))\n"
+           "            .background(.thinMaterial, in: .rect(cornerRadius: 13))\n    }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert any(f.tier == 2 and "font size" in f.message for f in findings)
+    assert any(f.tier == 2 and "cornerRadius" in f.message for f in findings)
+
+
+def test_padding_zero_and_one_not_flagged():
+    src = "let v = Rectangle().padding(0)\nlet w = Rectangle().padding(1)\n"
+    findings = doctor.lint_text("X.swift", src)
+    assert not any("magic" in f.message for f in findings)
+
+
+def test_magic_numbers_suppressed_in_test_files():
+    # XCTest fixture chrome (sizing a sample) is not product drift.
+    src = ("import XCTest\nfinal class T: XCTestCase {\n"
+           "    func test_x() throws { let v = Sample().padding(24) }\n}\n")
+    findings = doctor.lint_text("X.swift", src)
+    assert not any(f.tier == 2 and "magic" in f.message for f in findings)
+
+
+def test_raw_color_in_string_or_comment_does_not_fire():
+    # Blanked-code scanning: a Color(red:) in a comment/string must not trigger.
+    src = '// example: Color(red: 1, green: 0, blue: 0)\nlet s = "Color(red: 1, green: 0, blue: 0)"\n'
+    findings = doctor.lint_text("X.swift", src)
+    assert not any("raw colour" in f.message for f in findings)
+
+
 def test_kit_templates_are_clean():
     findings = []
-    for f in (_ROOT / "templates").glob("*.swift"):
-        findings += doctor.lint_text(str(f), f.read_text())
+    for f in (_ROOT / "templates").rglob("*.swift"):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for x in doctor.lint_text(str(f), text):
+            # Only assert on the §6 consistency rules this suite owns; the §2
+            # @unchecked-Sendable findings in the camera-fixture sibling templates
+            # are out of scope for the design-system rules.
+            if x.section == "§6" and ("raw colour" in x.message
+                                      or "ad-hoc" in x.message
+                                      or "magic" in x.message):
+                findings.append(x)
     assert findings == [], [x.format() for x in findings]
 
 

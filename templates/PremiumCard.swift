@@ -4,44 +4,45 @@ import SwiftUI
 /// SF Symbol (non-smiley), considered spacing and type. No emoji, no default
 /// blue button. See AGENTS.md §6.
 ///
+/// Composes the `DesignTokens` (`DS`) single source of truth — spacing, radius,
+/// type and the card surface (`.dsCard()`) all come from tokens, not raw values.
+/// This is what `vibe-ios-doctor`'s §6 consistency rules enforce, and what keeps
+/// the card coherent with every other surface in the app.
+///
 /// Starter template. Build and run before shipping; not yet device-verified.
 @available(iOS 17.0, *)
 struct PremiumCard: View {
     let title: String
     let subtitle: String
     let symbol: String          // an SF Symbol name, e.g. "waveform.path.ecg"
-    var accent: Color = .indigo
+    var accent: Color = DS.Color.accent
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: DS.Space.lg) {
             Image(systemName: symbol)
-                .font(.system(size: 22, weight: .medium))
+                .font(DS.Font.title)
                 .foregroundStyle(accent)
-                .frame(width: 44, height: 44)
-                .background(accent.opacity(0.12), in: .rect(cornerRadius: 12))
+                .frame(width: DS.Space.xxxl, height: DS.Space.xxxl)
+                .background(accent.opacity(0.12), in: .rect(cornerRadius: DS.Radius.md))
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DS.Space.xs) {
                 Text(title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+                    .font(DS.Font.headline)
+                    .foregroundStyle(DS.Color.textPrimary)
                 Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(DS.Font.callout)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .lineLimit(2)
             }
 
             Spacer(minLength: 0)
 
             Image(systemName: "chevron.right")
-                .font(.footnote.weight(.semibold))
+                .font(DS.Font.caption.weight(.semibold))
                 .foregroundStyle(.tertiary)
         }
-        .padding(16)
-        .background(.ultraThinMaterial, in: .rect(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .strokeBorder(.white.opacity(0.06), lineWidth: 1)
-        )
+        .padding(DS.Space.lg)
+        .dsCard()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title). \(subtitle)")
     }

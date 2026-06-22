@@ -1,0 +1,9 @@
+{
+  "_comment": "A GOLDEN: the recorded result for one fixture, captured ONCE on a trusted green run and committed. ScanFixtureTests compares against it within the tolerance bands in GoldenStore (qualityTol/rednessTol/reliefTol). The numbers below are PLACEHOLDERS — regenerate them for your real pipeline (run with -FixtureGoldenCapture YES, harvest the .actual.json XCTAttachment, copy it here). depthDerivedRelief is null on purpose: this is a FLAT RGB fixture, so the depth stage MUST report nil. A golden with a non-null relief for an RGB fixture is itself a bug.",
+  "sourceKind": "fixtureImage",
+  "faceDetected": true,
+  "captureQuality": 0.82,
+  "redness": 0.41,
+  "depthDerivedRelief": null,
+  "frameCount": 1
+}
