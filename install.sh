@@ -17,5 +17,13 @@ echo "Per project, copy the posture and templates into the project root:"
 echo "  cp ${KIT_DIR}/AGENTS.md       /path/to/YourApp/AGENTS.md"
 echo "  cp ${KIT_DIR}/templates/*     /path/to/YourApp/Sources/"
 echo
-echo "For surgical Swift edits (recommended):"
-echo "  pip install vibe-fim   # see skills/ios-surgical-edit.md"
+echo "For surgical, agent-invoked Swift edits (recommended):"
+echo "  pip install \"vibe-fim[mcp]\"   # provides vibe-fim-mcp, wired in agents/ios.toml"
+if command -v vibe-fim-mcp >/dev/null 2>&1; then
+  echo "  vibe-fim-mcp is on PATH — the surgical_patch tool will load in 'vibe --agent ios'."
+else
+  echo "  NOTE: vibe-fim-mcp is not on PATH yet; install it so the tool loads."
+fi
+echo
+echo "Gate your Swift sources with the posture lint:"
+echo "  ${KIT_DIR}/bin/vibe-ios-doctor Sources/"

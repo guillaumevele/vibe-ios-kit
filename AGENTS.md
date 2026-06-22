@@ -69,7 +69,9 @@ rest, it is a bug, not a polish item.
   feeding `time`), never an unconditional wall clock.
 - Keep `.metal` functions branch-light; precompute on the CPU what does not vary
   per pixel.
-- Always provide a non-Metal fallback path for previews and reduced-motion.
+- Provide a **frozen-uniform or non-Metal fallback** for previews and reduced
+  motion: feeding a constant `time` freezes the effect with zero per-frame work,
+  which satisfies §5's "static state" without a second code path.
 
 ## 5. Accessibility & reduced motion
 

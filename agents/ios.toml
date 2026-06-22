@@ -11,3 +11,19 @@ display_name = "iOS Builder"
 description = "Build premium iOS 26/27 apps: SwiftUI, real gated Metal shaders, Swift 6 strict concurrency. Edits surgically and proves results on a real build."
 safety = "neutral"
 agent_type = "agent"
+
+# Real override (not just a label): iOS builds — xcodebuild, clean, archive,
+# metallib — routinely exceed the default 300s bash timeout. Mirrors vibe's own
+# built-in LEAN agent, which sets exactly this for its slow toolchain.
+[tools.bash]
+default_timeout = 1200
+
+# Bounded Swift edits as a first-class tool the agent invokes itself. Requires
+# `pip install "vibe-fim[mcp]"` (install.sh does this); vibe-fim-mcp must be on
+# PATH. The agent computes anchors and calls surgical_patch instead of rewriting
+# a working .swift file. See skills/ios-surgical-edit.md.
+[[mcp_servers]]
+name = "vibe-fim"
+transport = "stdio"
+command = "vibe-fim-mcp"
+prompt = "Prefer surgical_patch for editing a Swift file that already compiles: it rewrites ONLY the region between two unique anchors via Codestral FIM, keeps the prefix/suffix byte-identical, and rejects the edit if the file no longer parses."
