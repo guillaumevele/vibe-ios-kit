@@ -12,11 +12,9 @@ import SwiftUI
 /// It is built ENTIRELY from `DS` tokens — accent, radius, spacing, type, motion
 /// — so a re-skin is a token change, not a per-button edit.
 ///
-/// iOS 26 path (verified against the SDK): reads `@Environment(\.buttonSizing)`
-/// and styles `configuration.content`, so the button adapts to `.buttonSizing(
-/// .flexible)` like a native control. Pre-26 path styles `configuration.label`
-/// with a sensible fixed width. The pressed state is driven by
-/// `configuration.isPressed` (ButtonStyleConfiguration, iOS 13+).
+/// The style uses `configuration.label` and a sensible minimum width. The
+/// pressed state is driven by `configuration.isPressed`
+/// (`ButtonStyleConfiguration`, iOS 13+).
 ///
 /// Premium per AGENTS.md §6: solid accent, white label, token corner, a brief
 /// scale + opacity press feedback (easing, not bounce), respectful of Reduce

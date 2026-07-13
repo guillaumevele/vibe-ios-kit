@@ -1,8 +1,9 @@
 # One bug this posture would have caught: VeraOrbV4, `bug_type 202`
 
-The kit's rules are not abstract. This is the production incident they are
-distilled from — shown with the evidence that actually exists, and nothing it
-doesn't (AGENTS.md §0: never claim a result you did not see).
+The kit's rules are not abstract. This is the private production incident they
+are distilled from. The original `.ips` contains private device and application
+metadata and is not published here, so this document is an incident report, not
+an independently verifiable public receipt.
 
 ## What shipped, and what it did
 
@@ -19,11 +20,13 @@ was not a segfault — it was a CPU resource exception:
 sustained main-thread stack:  UpdateCycle → SwiftUICore → AttributeGraph
 ```
 
-That `.ips` is the receipt: machine-generated, reproducible, and the
-`UpdateCycle → SwiftUICore → AttributeGraph` signature names the hog. The same
-class of bug fired **three times in one night** — `MeshGradient` re-rasterizing
-(01:18), then a blur header re-rasterizing over a scroll (01:32), then a clean
-re-soak with zero 202 (01:41).
+The private `.ips` was the machine-generated evidence used during diagnosis; its
+`UpdateCycle → SwiftUICore → AttributeGraph` stack identified the hot path. The
+raw report is not included, and the timeline below should therefore be read as
+the author's incident account rather than a public reproduction artifact. The
+same class of bug appeared three times in one night — `MeshGradient`
+re-rasterizing (01:18), then a blur header re-rasterizing over a scroll (01:32),
+then a re-soak with no observed `bug_type 202` report (01:41).
 
 ## The fix, mapped to the posture
 
@@ -46,12 +49,12 @@ pause off screen; and gate the whole thing behind a 3-minute idle-CPU soak.
 Bool/Binding gate in the enclosing view. It is a token-presence heuristic, not a
 proof of the gating relationship (a guard token that gates a *different* view in
 the same type can suppress it), so it is a gate, not a guarantee — the 3-minute
-device soak above is the real proof.
+device soak above was the internal acceptance evidence.
 
 ## The numbers, qualified honestly
 
 - **Before:** sustained 100% on one core, **watchdog-killed** at the ~90-second
-  mark under Auto-Lock = Never. That is the defensible before-state — a kill, not
+  mark under Auto-Lock = Never. That is the reported before-state — a kill, not
   a traced percentage.
 - **After (target):** for an animated screen at rest, `xctrace` sustained CPU
   **below ~30–40%**. This is the acceptance band, not a fresh measurement; treat
