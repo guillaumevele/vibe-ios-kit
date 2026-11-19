@@ -34,8 +34,8 @@
   "lines": 503,
   "swift5_errors": [],
   "swift6_errors": [
-   "Formatters.swift:5:24: error: static property 'standard' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]",
-   "Formatters.swift:11:24: error: static property 'fractional' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]"
+   "Formatters.swift:11:24: error: static property 'fractional' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]",
+   "Formatters.swift:5:24: error: static property 'standard' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]"
   ],
   "swift5_error_count": 0,
   "swift6_error_count": 2,

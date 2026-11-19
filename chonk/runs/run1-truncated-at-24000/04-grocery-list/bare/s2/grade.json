@@ -28,14 +28,14 @@
   ],
   "lines": 634,
   "swift5_errors": [
-   "Category.swift:14:9: error: circular reference",
    "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
-   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type",
+   "Category.swift:14:9: error: circular reference"
   ],
   "swift6_errors": [
-   "Category.swift:14:9: error: circular reference",
    "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
-   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type",
+   "Category.swift:14:9: error: circular reference"
   ],
   "swift5_error_count": 3,
   "swift6_error_count": 3,

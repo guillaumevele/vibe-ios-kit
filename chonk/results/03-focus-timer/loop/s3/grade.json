@@ -34,8 +34,8 @@
    "HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')"
   ],
   "swift6_errors": [
-   "HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')",
-   "HistoryView.swift:62:10: error: type '(_) -> Text' cannot conform to 'StringProtocol' [#ProtocolTypeNonConformance]"
+   "HistoryView.swift:62:10: error: type '(_) -> Text' cannot conform to 'StringProtocol' [#ProtocolTypeNonConformance]",
+   "HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')"
   ],
   "swift5_error_count": 2,
   "swift6_error_count": 2,

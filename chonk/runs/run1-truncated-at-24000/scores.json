@@ -392,8 +392,8 @@
     "lines": 503,
     "swift5_errors": [],
     "swift6_errors": [
-     "Formatters.swift:5:24: error: static property 'standard' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]",
-     "Formatters.swift:11:24: error: static property 'fractional' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]"
+     "Formatters.swift:11:24: error: static property 'fractional' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]",
+     "Formatters.swift:5:24: error: static property 'standard' is not concurrency-safe because non-'Sendable' type 'ISO8601DateFormatter' may have shared mutable state [#MutableGlobalVariable]"
     ],
     "swift5_error_count": 0,
     "swift6_error_count": 2,
@@ -466,42 +466,42 @@
     ],
     "lines": 37,
     "swift5_errors": [
-     "macro expansion @State:9:41: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @State:10:26: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @State:8:39: error: could not infer type for placeholder",
      "FeedReaderApp.swift:11:32: error: cannot find 'ArticleListModel' in scope",
      "FeedReaderApp.swift:12:18: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @State:2:9: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @State:3:26: error: cannot find 'URLSessionFeedService' in scope",
+     "FeedReaderApp.swift:17:13: error: cannot find 'ArticleListView' in scope",
+     "macro expansion @State:10:26: error: cannot find 'URLSessionFeedService' in scope",
      "macro expansion @State:15:54: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @State:16:18: error: cannot find 'URLSessionFeedService' in scope",
+     "macro expansion @State:20:138: error: generic parameter 'Value' could not be inferred",
      "macro expansion @State:20:171: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @State:21:18: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @State:20:138: error: generic parameter 'Value' could not be inferred",
-     "macro expansion @_StateInitialStoredValue:4:17: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @_StateInitialStoredValue:5:34: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @_StateInitialStoredValue:3:40: error: missing argument label 'initialValue:' in call",
+     "macro expansion @State:2:9: error: cannot find 'ArticleListModel' in scope",
+     "macro expansion @State:3:26: error: cannot find 'URLSessionFeedService' in scope",
+     "macro expansion @State:8:39: error: could not infer type for placeholder",
+     "macro expansion @State:9:41: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @_StateInitialStoredValue:3:40: error: closure passed to parameter of type 'Value' that does not accept a closure",
-     "FeedReaderApp.swift:17:13: error: cannot find 'ArticleListView' in scope"
+     "macro expansion @_StateInitialStoredValue:3:40: error: missing argument label 'initialValue:' in call",
+     "macro expansion @_StateInitialStoredValue:4:17: error: cannot find 'ArticleListModel' in scope",
+     "macro expansion @_StateInitialStoredValue:5:34: error: cannot find 'URLSessionFeedService' in scope"
     ],
     "swift6_errors": [
-     "macro expansion @State:9:41: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @State:10:26: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @State:8:39: error: could not infer type for placeholder",
-     "macro expansion @State:2:9: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @State:3:26: error: cannot find 'URLSessionFeedService' in scope",
      "FeedReaderApp.swift:11:32: error: cannot find 'ArticleListModel' in scope",
      "FeedReaderApp.swift:12:18: error: cannot find 'URLSessionFeedService' in scope",
+     "FeedReaderApp.swift:17:13: error: cannot find 'ArticleListView' in scope",
+     "macro expansion @State:10:26: error: cannot find 'URLSessionFeedService' in scope",
      "macro expansion @State:15:54: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @State:16:18: error: cannot find 'URLSessionFeedService' in scope",
+     "macro expansion @State:20:138: error: generic parameter 'Value' could not be inferred",
      "macro expansion @State:20:171: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @State:21:18: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @State:20:138: error: generic parameter 'Value' could not be inferred",
-     "macro expansion @_StateInitialStoredValue:4:17: error: cannot find 'ArticleListModel' in scope",
-     "macro expansion @_StateInitialStoredValue:5:34: error: cannot find 'URLSessionFeedService' in scope",
-     "macro expansion @_StateInitialStoredValue:3:40: error: missing argument label 'initialValue:' in call",
+     "macro expansion @State:2:9: error: cannot find 'ArticleListModel' in scope",
+     "macro expansion @State:3:26: error: cannot find 'URLSessionFeedService' in scope",
+     "macro expansion @State:8:39: error: could not infer type for placeholder",
+     "macro expansion @State:9:41: error: cannot find 'ArticleListModel' in scope",
      "macro expansion @_StateInitialStoredValue:3:40: error: closure passed to parameter of type 'Value' that does not accept a closure",
-     "FeedReaderApp.swift:17:13: error: cannot find 'ArticleListView' in scope"
+     "macro expansion @_StateInitialStoredValue:3:40: error: missing argument label 'initialValue:' in call",
+     "macro expansion @_StateInitialStoredValue:4:17: error: cannot find 'ArticleListModel' in scope",
+     "macro expansion @_StateInitialStoredValue:5:34: error: cannot find 'URLSessionFeedService' in scope"
     ],
     "swift5_error_count": 17,
     "swift6_error_count": 17,
@@ -820,14 +820,14 @@
     ],
     "lines": 634,
     "swift5_errors": [
-     "Category.swift:14:9: error: circular reference",
      "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
-     "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+     "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type",
+     "Category.swift:14:9: error: circular reference"
     ],
     "swift6_errors": [
-     "Category.swift:14:9: error: circular reference",
      "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
-     "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+     "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type",
+     "Category.swift:14:9: error: circular reference"
     ],
     "swift5_error_count": 3,
     "swift6_error_count": 3,
@@ -1020,12 +1020,12 @@
     ],
     "lines": 522,
     "swift5_errors": [
-     "ContentView.swift:37:23: error: extra trailing closure passed in call",
-     "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"
+     "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions",
+     "ContentView.swift:37:23: error: extra trailing closure passed in call"
     ],
     "swift6_errors": [
-     "ContentView.swift:37:23: error: extra trailing closure passed in call",
-     "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"
+     "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions",
+     "ContentView.swift:37:23: error: extra trailing closure passed in call"
     ],
     "swift5_error_count": 2,
     "swift6_error_count": 2,

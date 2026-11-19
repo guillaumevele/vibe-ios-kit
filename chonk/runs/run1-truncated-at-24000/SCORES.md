@@ -13,6 +13,7 @@
 | `bounded_animation` | 9/12 | 3/12 | 2/2 |
 | `sf_symbols_exist` | 9/12 | 3/12 | 2/2 |
 | `no_emoji` | 9/12 | 3/12 | 2/2 |
+| all 13 checks | 0/12 | 0/12 | 1/2 |
 | replies cut at the token limit | 4/12 | 11/12 | 0/2 |
 | no Swift source in the reply | 3/12 | 9/12 | 0/2 |
 

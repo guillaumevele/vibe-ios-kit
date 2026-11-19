@@ -191,6 +191,7 @@ def compile_swift(files: list[Path], version: str, cache: Path) -> dict:
             if line not in seen:
                 seen.add(line)
                 diags.append(line)
+    diags.sort()  # the compiler's order varies between two runs on the same files
     return {
         "errors": [d for d in diags if ": error:" in d],
         "deprecations": [d for d in diags if ": warning:" in d and "deprecated" in d],

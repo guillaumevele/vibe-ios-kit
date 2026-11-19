@@ -28,12 +28,12 @@
   ],
   "lines": 522,
   "swift5_errors": [
-   "ContentView.swift:37:23: error: extra trailing closure passed in call",
-   "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"
+   "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions",
+   "ContentView.swift:37:23: error: extra trailing closure passed in call"
   ],
   "swift6_errors": [
-   "ContentView.swift:37:23: error: extra trailing closure passed in call",
-   "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"
+   "ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions",
+   "ContentView.swift:37:23: error: extra trailing closure passed in call"
   ],
   "swift5_error_count": 2,
   "swift6_error_count": 2,
