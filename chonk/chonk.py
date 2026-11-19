@@ -37,7 +37,9 @@ TEMPERATURE = 0.7
 # The documented default for this model, set explicitly so a change of default
 # cannot silently change the experiment (docs.mistral.ai/capabilities/reasoning).
 REASONING_EFFORT = "high"
-MAX_TOKENS = 24000
+# Reasoning tokens count against this limit. At 24000 the first run lost 15 of
+# 24 replies to reasoning that never reached the answer (see chonk/runs/).
+MAX_TOKENS = 64000
 # USD per million tokens, read on docs.mistral.ai/models/mistral-large-4-0 on 2026-11-19.
 PRICE_IN, PRICE_OUT = 0.7, 2.1
 
@@ -65,7 +67,7 @@ def chat(messages: list[dict], seed: int) -> tuple[str, dict]:
         "Authorization": f"Bearer {api_key()}", "Content-Type": "application/json"})
     for attempt in range(6):
         try:
-            with urllib.request.urlopen(req, timeout=1800) as r:
+            with urllib.request.urlopen(req, timeout=3600) as r:
                 data = json.load(r)
             break
         except urllib.error.HTTPError as e:
@@ -155,8 +157,9 @@ def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2,
         if arm != "loop" or all(g["checks"].values()):
             break
         (out / f"gate-round{rnd}.txt").write_text(feedback(g) + "\n")
-        messages += [{"role": "assistant", "content": response},
-                     {"role": "user", "content": feedback(g)}]
+        if response.strip():  # an empty reply cannot be sent back: ask again as is
+            messages += [{"role": "assistant", "content": response},
+                         {"role": "user", "content": feedback(g)}]
     tin = sum(u.get("prompt_tokens", 0) for u in usages)
     tout = sum(u.get("completion_tokens", 0) for u in usages)
     meta = {"model": MODEL, "arm": arm, "seed": seed, "temperature": TEMPERATURE,
@@ -165,6 +168,7 @@ def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2,
             "continued_from": f"kit/{first_from.name}" if first_from else None,
             "api_calls": len(usages), "prompt_tokens": tin, "completion_tokens": tout,
             "finish_reasons": [u.get("finish_reason") for u in usages],
+            "truncated": bool(usages) and usages[-1].get("finish_reason") == "length",
             "cost_usd": round(tin / 1e6 * PRICE_IN + tout / 1e6 * PRICE_OUT, 4),
             "files": files}
     (out / "meta.json").write_text(json.dumps(meta, indent=1) + "\n")
@@ -226,7 +230,7 @@ def main() -> int:
     e.add_argument("--arms", nargs="+", default=["bare", "kit", "loop"])
     e.add_argument("--samples", type=int, default=3)
     e.add_argument("--rounds", type=int, default=2)
-    e.add_argument("--jobs", type=int, default=6)
+    e.add_argument("--jobs", type=int, default=12)
     e.add_argument("--force", action="store_true", help="regenerate runs that already exist")
     e.set_defaults(fn=cmd_eval)
     args = ap.parse_args()

@@ -285,7 +285,10 @@ def regrade(results: Path) -> dict:
         prompt, arm, sample = run_dir.parts[-3:]
         g = grade_sources(run_dir / "Sources")
         (run_dir / "grade.json").write_text(json.dumps(g, indent=1) + "\n")
-        runs.append({"prompt": prompt, "arm": arm, "sample": sample, **g})
+        meta = json.loads(meta_path.read_text())
+        runs.append({"prompt": prompt, "arm": arm, "sample": sample,
+                     "truncated": bool(meta.get("truncated")) or (meta.get("finish_reasons") or [None])[-1] == "length",
+                     "api_calls": meta.get("api_calls"), "cost_usd": meta.get("cost_usd"), **g})
         print(f"graded {prompt}/{arm}/{sample}: "
               f"{sum(g['checks'].values())}/{len(CHECKS)}", file=sys.stderr)
     return {"toolchain": toolchain(), "checks": CHECKS, "runs": runs}
@@ -300,6 +303,9 @@ def table(scores: dict) -> str:
     for c in scores["checks"]:
         cells = [f"{sum(1 for r in runs if r['arm'] == a and r['checks'][c])}/{n[a]}" for a in arms]
         lines.append(f"| `{c}` | " + " | ".join(cells) + " |")
+    for label, key in (("replies cut at the token limit", "truncated"), ("no Swift source in the reply", "no_source")):
+        cells = [f"{sum(1 for r in runs if r['arm'] == a and r.get(key))}/{n[a]}" for a in arms]
+        lines.append(f"| {label} | " + " | ".join(cells) + " |")
     lines.append("")
     prompts = sorted({r["prompt"] for r in runs})
     lines.append("| prompt | " + " | ".join(f"{a}: checks passed, mean of {len(scores['checks'])}" for a in arms) + " |")

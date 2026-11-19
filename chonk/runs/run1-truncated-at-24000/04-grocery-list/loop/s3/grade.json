@@ -1,0 +1,54 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": true,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "CategorySectionView.swift",
+   "ContentView.swift",
+   "Design.swift",
+   "GroceryListApp.swift",
+   "GroceryListModel.swift",
+   "GroceryRow.swift",
+   "GroceryStore.swift",
+   "Models.swift",
+   "NewItemSheet.swift"
+  ],
+  "lines": 577,
+  "swift5_errors": [
+   "CategorySectionView.swift:22:65: error: extra argument 'allowsFullSwipeToTrigger' in call",
+   "CategorySectionView.swift:29:66: error: extra argument 'allowsFullSwipeToTrigger' in call"
+  ],
+  "swift6_errors": [
+   "CategorySectionView.swift:22:65: error: extra argument 'allowsFullSwipeToTrigger' in call",
+   "CategorySectionView.swift:29:66: error: extra argument 'allowsFullSwipeToTrigger' in call"
+  ],
+  "swift5_error_count": 2,
+  "swift6_error_count": 2,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": true,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 6,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

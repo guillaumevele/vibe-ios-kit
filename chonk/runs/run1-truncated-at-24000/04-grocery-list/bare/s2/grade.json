@@ -1,0 +1,58 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": false,
+  "dynamic_type": true,
+  "reduce_motion": false,
+  "loading_state": false,
+  "empty_state": true,
+  "error_state": false,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "AddCategoryView.swift",
+   "AddItemView.swift",
+   "Category.swift",
+   "ColorHex.swift",
+   "ContentView.swift",
+   "GroceryItem.swift",
+   "GroceryListApp.swift",
+   "ManageCategoriesView.swift"
+  ],
+  "lines": 634,
+  "swift5_errors": [
+   "Category.swift:14:9: error: circular reference",
+   "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
+   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+  ],
+  "swift6_errors": [
+   "Category.swift:14:9: error: circular reference",
+   "AddItemView.swift:74:45: error: use [:] to get an empty dictionary literal",
+   "AddItemView.swift:74:53: error: cannot infer key path type from context; consider explicitly specifying a root type"
+  ],
+  "swift5_error_count": 3,
+  "swift6_error_count": 3,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [
+   30,
+   52
+  ],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": false,
+  "force_try": 1,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 9,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

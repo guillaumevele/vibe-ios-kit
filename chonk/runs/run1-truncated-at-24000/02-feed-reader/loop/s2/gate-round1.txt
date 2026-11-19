@@ -1,0 +1,14 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+- No ```swift block was found in your reply.
+- deprecated API: 
+- legacy API in use: 
+- icon-only buttons without accessibilityLabel near lines None
+- fixed font sizes: replace .system(size:) with text styles
+- the app animates but never reads accessibilityReduceMotion
+- no loading state (ProgressView)
+- no empty state (ContentUnavailableView)
+- errors are not caught and stored for display, or try! is used
+- unguarded continuous animation: 
+- SF Symbol names that do not exist: 
+- emoji in source: 

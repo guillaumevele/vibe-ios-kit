@@ -1,0 +1,6 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  CategorySectionView.swift:22:65: error: extra argument 'allowsFullSwipeToTrigger' in call
+  CategorySectionView.swift:29:66: error: extra argument 'allowsFullSwipeToTrigger' in call
+- deprecated API: 

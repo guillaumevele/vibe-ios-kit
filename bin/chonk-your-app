@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# chonk-your-app: ask Mistral Large 4 for an iOS app with the kit's brief, then
+# run the gate (Swift 6 type-check, vibe-ios-doctor, rubric) and send its
+# findings back until the gate passes or the rounds run out.
+#
+#   bin/chonk-your-app "Create an iOS app to ..." -o MyApp
+#
+# Needs Xcode and MISTRAL_API_KEY (or ~/.vibe/.env). See chonk/README.md.
+set -euo pipefail
+KIT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || echo "${BASH_SOURCE[0]}")")/.." && pwd)"
+exec python3 "${KIT_DIR}/chonk/chonk.py" new "$@"

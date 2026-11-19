@@ -1,0 +1,6 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  ContentView.swift:37:23: error: extra trailing closure passed in call
+  ContentView.swift:113:29: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+- deprecated API: 

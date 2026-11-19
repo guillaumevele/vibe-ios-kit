@@ -1,0 +1,18 @@
+{
+ "model": "mistral-large-4",
+ "arm": "bare",
+ "seed": 1,
+ "temperature": 0.7,
+ "reasoning_effort": "high",
+ "max_tokens": 24000,
+ "request": "Create an iOS app that shows the latest articles from a JSON feed URL, with pull to refresh and a detail screen.",
+ "continued_from": null,
+ "api_calls": 1,
+ "prompt_tokens": 113,
+ "completion_tokens": 24000,
+ "finish_reasons": [
+  "length"
+ ],
+ "cost_usd": 0.0505,
+ "files": []
+}
