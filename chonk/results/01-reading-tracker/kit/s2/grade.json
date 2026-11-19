@@ -1,0 +1,53 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": true,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "AddBookView.swift",
+   "AppDesign.swift",
+   "Book.swift",
+   "BookDetailView.swift",
+   "BookDraft.swift",
+   "BookListView.swift",
+   "BookRow.swift",
+   "BookStore.swift",
+   "LibraryModel.swift",
+   "ReadingListApp.swift"
+  ],
+  "lines": 730,
+  "swift5_errors": [
+   "AppDesign.swift:13:35: error: type 'AppDesign.Color' has no member 'accentColor'"
+  ],
+  "swift6_errors": [
+   "AppDesign.swift:13:35: error: type 'AppDesign.Color' has no member 'accentColor'"
+  ],
+  "swift5_error_count": 1,
+  "swift6_error_count": 1,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": true,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 8,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

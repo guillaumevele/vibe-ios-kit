@@ -1,0 +1,59 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": true,
+  "compiles_swift6": true,
+  "no_deprecation_warnings": true,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": false,
+  "dynamic_type": false,
+  "reduce_motion": true,
+  "loading_state": false,
+  "empty_state": true,
+  "error_state": false,
+  "bounded_animation": true,
+  "sf_symbols_exist": false,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "Book.swift",
+   "BookDetailView.swift",
+   "BookFormView.swift",
+   "BookListView.swift",
+   "BookProgressBar.swift",
+   "BookRowView.swift",
+   "BookStore.swift",
+   "BookTrackerApp.swift",
+   "ContentView.swift",
+   "CoverView.swift",
+   "Formatters.swift",
+   "LibraryFilter.swift",
+   "ReadingEntry.swift",
+   "ReadingStatus.swift",
+   "StatsView.swift"
+  ],
+  "lines": 977,
+  "swift5_errors": [],
+  "swift6_errors": [],
+  "swift5_error_count": 0,
+  "swift6_error_count": 0,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [
+   176
+  ],
+  "fixed_font_sizes": 2,
+  "animates": false,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": false,
+  "phantom_symbols": [
+   "book.open",
+   "questionmark.book"
+  ],
+  "symbols_used": 12,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

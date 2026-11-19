@@ -1,0 +1,60 @@
+bare+kit: 9 run(s)
+done 01-reading-tracker/kit/s1: 10/13 $0.0621
+done 03-focus-timer/kit/s1: 10/13 $0.0759
+done 03-focus-timer/bare/s3: 5/13 $0.0656
+done 03-focus-timer/kit/s3: 10/13 $0.0705
+done 01-reading-tracker/kit/s3: 10/13 $0.0722
+done 04-grocery-list/kit/s2: 10/13 $0.0493
+done 04-grocery-list/kit/s1: 10/13 $0.0727
+done 04-grocery-list/kit/s3: 13/13 $0.0686
+done 03-focus-timer/kit/s2: 10/13 $0.0765
+loop: 0 run(s)
+graded 01-reading-tracker/bare/s1: 11/13
+graded 01-reading-tracker/bare/s2: 8/13
+graded 01-reading-tracker/bare/s3: 11/13
+graded 01-reading-tracker/kit/s1: 10/13
+graded 01-reading-tracker/kit/s2: 10/13
+graded 01-reading-tracker/kit/s3: 10/13
+graded 02-feed-reader/bare/s1: 8/13
+graded 02-feed-reader/bare/s2: 9/13
+graded 02-feed-reader/bare/s3: 11/13
+graded 02-feed-reader/kit/s1: 10/13
+graded 02-feed-reader/kit/s2: 13/13
+graded 02-feed-reader/kit/s3: 11/13
+graded 03-focus-timer/bare/s1: 6/13
+graded 03-focus-timer/bare/s2: 6/13
+graded 03-focus-timer/bare/s3: 5/13
+graded 03-focus-timer/kit/s1: 10/13
+graded 03-focus-timer/kit/s2: 10/13
+graded 03-focus-timer/kit/s3: 10/13
+graded 04-grocery-list/bare/s1: 10/13
+graded 04-grocery-list/bare/s2: 10/13
+graded 04-grocery-list/bare/s3: 8/13
+graded 04-grocery-list/kit/s1: 10/13
+graded 04-grocery-list/kit/s2: 10/13
+graded 04-grocery-list/kit/s3: 13/13
+| check | bare (n=12) | kit (n=12) |
+|---|---|---|
+| `compiles_swift5` | 6/12 | 2/12 |
+| `compiles_swift6` | 5/12 | 3/12 |
+| `no_deprecation_warnings` | 6/12 | 2/12 |
+| `no_legacy_api` | 11/12 | 12/12 |
+| `icon_buttons_labelled` | 8/12 | 12/12 |
+| `dynamic_type` | 6/12 | 12/12 |
+| `reduce_motion` | 4/12 | 12/12 |
+| `loading_state` | 6/12 | 12/12 |
+| `empty_state` | 12/12 | 12/12 |
+| `error_state` | 4/12 | 12/12 |
+| `bounded_animation` | 12/12 | 12/12 |
+| `sf_symbols_exist` | 11/12 | 12/12 |
+| `no_emoji` | 12/12 | 12/12 |
+| replies cut at the token limit | 0/12 | 0/12 |
+| no Swift source in the reply | 0/12 | 0/12 |
+
+| prompt | bare: checks passed, mean of 13 | kit: checks passed, mean of 13 |
+|---|---|---|
+| 01-reading-tracker | 10.0 | 10.0 |
+| 02-feed-reader | 9.3 | 11.3 |
+| 03-focus-timer | 5.7 | 10.0 |
+| 04-grocery-list | 9.3 | 11.0 |
+

@@ -1,0 +1,61 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": false,
+  "icon_buttons_labelled": true,
+  "dynamic_type": false,
+  "reduce_motion": false,
+  "loading_state": false,
+  "empty_state": true,
+  "error_state": false,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "ContentView.swift",
+   "CountdownRingView.swift",
+   "FocusNotifier.swift",
+   "FocusSession.swift",
+   "FocusTimerApp.swift",
+   "HistoryView.swift",
+   "RootView.swift",
+   "SessionStore.swift",
+   "TimerEngine.swift"
+  ],
+  "lines": 737,
+  "swift5_errors": [
+   "ContentView.swift:148:34: error: cannot find 'AnyButtonStyle' in scope",
+   "ContentView.swift:148:68: error: cannot find 'AnyButtonStyle' in scope"
+  ],
+  "swift6_errors": [
+   "ContentView.swift:148:34: error: cannot find 'AnyButtonStyle' in scope",
+   "ContentView.swift:148:68: error: cannot find 'AnyButtonStyle' in scope"
+  ],
+  "swift5_error_count": 2,
+  "swift6_error_count": 2,
+  "deprecations": [],
+  "legacy_api": [
+   "ObservableObject",
+   "@Published",
+   "@StateObject",
+   "@ObservedObject",
+   "@EnvironmentObject",
+   ".cornerRadius("
+  ],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 3,
+  "animates": true,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": false,
+  "phantom_symbols": [],
+  "symbols_used": 6,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

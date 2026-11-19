@@ -71,7 +71,7 @@ def chat(messages: list[dict], seed: int) -> tuple[str, dict]:
                 data = json.load(r)
             break
         except urllib.error.HTTPError as e:
-            if e.code in (429, 500, 502, 503, 504) and attempt < 5:
+            if (e.code == 429 or e.code >= 500) and attempt < 5:  # 520 seen from the edge on 2026-11-19
                 time.sleep(15 * (attempt + 1))
                 continue
             raise SystemExit(f"chonk: Mistral API returned HTTP {e.code}: {e.read()[:300]!r}")
@@ -208,7 +208,11 @@ def cmd_eval(args) -> int:
             futures = {pool.submit(generate, *j): j for j in jobs}
             for f in cf.as_completed(futures):
                 j = futures[f]
-                r = f.result()
+                try:
+                    r = f.result()
+                except SystemExit as e:  # one failed call must not lose the others
+                    print(f"FAILED {j[3].relative_to(args.results)}: {e}", file=sys.stderr, flush=True)
+                    continue
                 print(f"done {j[3].relative_to(args.results)}: "
                       f"{sum(r['grade']['checks'].values())}/{len(grade.CHECKS)} "
                       f"${r['meta']['cost_usd']}", file=sys.stderr, flush=True)
@@ -230,7 +234,7 @@ def main() -> int:
     e.add_argument("--arms", nargs="+", default=["bare", "kit", "loop"])
     e.add_argument("--samples", type=int, default=3)
     e.add_argument("--rounds", type=int, default=2)
-    e.add_argument("--jobs", type=int, default=12)
+    e.add_argument("--jobs", type=int, default=6)
     e.add_argument("--force", action="store_true", help="regenerate runs that already exist")
     e.set_defaults(fn=cmd_eval)
     args = ap.parse_args()
