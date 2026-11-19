@@ -8,7 +8,8 @@ Three arms:
   bare  the request and the output contract, no system prompt
   kit   the same, with chonk/BRIEF.md as the system prompt
   loop  kit, then up to N rounds where the gate's findings (compiler errors,
-        failed rubric checks) are sent back and the model resubmits
+        failed rubric checks) are sent back and the model resubmits. In `eval`
+        the loop arm continues the kit run of the same prompt and seed.
 
 The API key is read from $MISTRAL_API_KEY, else from ~/.vibe/.env. It is never
 printed and never written to an output file. Standard library only.
@@ -33,6 +34,9 @@ import grade  # noqa: E402
 MODEL = "mistral-large-4"
 API = "https://api.mistral.ai/v1/chat/completions"
 TEMPERATURE = 0.7
+# The documented default for this model, set explicitly so a change of default
+# cannot silently change the experiment (docs.mistral.ai/capabilities/reasoning).
+REASONING_EFFORT = "high"
 MAX_TOKENS = 24000
 # USD per million tokens, read on docs.mistral.ai/models/mistral-large-4-0 on 2026-11-19.
 PRICE_IN, PRICE_OUT = 0.7, 2.1
@@ -55,12 +59,13 @@ def api_key() -> str:
 
 def chat(messages: list[dict], seed: int) -> tuple[str, dict]:
     body = json.dumps({"model": MODEL, "messages": messages, "temperature": TEMPERATURE,
-                       "random_seed": seed, "max_tokens": MAX_TOKENS}).encode()
+                       "random_seed": seed, "max_tokens": MAX_TOKENS,
+                       "reasoning_effort": REASONING_EFFORT}).encode()
     req = urllib.request.Request(API, data=body, headers={
         "Authorization": f"Bearer {api_key()}", "Content-Type": "application/json"})
     for attempt in range(6):
         try:
-            with urllib.request.urlopen(req, timeout=900) as r:
+            with urllib.request.urlopen(req, timeout=1800) as r:
                 data = json.load(r)
             break
         except urllib.error.HTTPError as e:
@@ -125,8 +130,12 @@ def feedback(g: dict) -> str:
     return "\n".join(out)
 
 
-def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2) -> dict:
-    """Run one arm. Writes response.md, Sources/, meta.json and grade.json to `out`."""
+def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2,
+             first_from: Path | None = None) -> dict:
+    """Run one arm. Writes response.md, Sources/, meta.json and grade.json to `out`.
+
+    `first_from` is a finished kit run: the loop arm then starts from that run's
+    reply instead of asking again, so loop = that exact kit result + the gate."""
     out.mkdir(parents=True, exist_ok=True)
     contract = (HERE / "CONTRACT.txt").read_text().strip()
     messages = []
@@ -135,8 +144,11 @@ def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2) -> d
     messages.append({"role": "user", "content": f"{request.strip()}\n\n{contract}"})
     usages, g = [], None
     for rnd in range(1 + (rounds if arm == "loop" else 0)):
-        response, usage = chat(messages, seed)
-        usages.append(usage)
+        if rnd == 0 and first_from is not None:
+            response = (first_from / "response.md").read_text()
+        else:
+            response, usage = chat(messages, seed)
+            usages.append(usage)
         (out / ("response.md" if rnd == 0 else f"response-round{rnd}.md")).write_text(response)
         files = extract(response, out / "Sources")
         g = grade.grade_sources(out / "Sources")
@@ -147,8 +159,10 @@ def generate(request: str, arm: str, seed: int, out: Path, rounds: int = 2) -> d
                      {"role": "user", "content": feedback(g)}]
     tin = sum(u.get("prompt_tokens", 0) for u in usages)
     tout = sum(u.get("completion_tokens", 0) for u in usages)
-    meta = {"model": MODEL, "served_model": usages[-1].get("model"), "arm": arm, "seed": seed,
-            "temperature": TEMPERATURE, "max_tokens": MAX_TOKENS, "request": request.strip(),
+    meta = {"model": MODEL, "arm": arm, "seed": seed, "temperature": TEMPERATURE,
+            "reasoning_effort": REASONING_EFFORT, "max_tokens": MAX_TOKENS,
+            "request": request.strip(),
+            "continued_from": f"kit/{first_from.name}" if first_from else None,
             "api_calls": len(usages), "prompt_tokens": tin, "completion_tokens": tout,
             "finish_reasons": [u.get("finish_reason") for u in usages],
             "cost_usd": round(tin / 1e6 * PRICE_IN + tout / 1e6 * PRICE_OUT, 4),
@@ -173,23 +187,27 @@ def cmd_new(args) -> int:
 
 def cmd_eval(args) -> int:
     prompts = sorted((HERE / "prompts").glob("*.txt"))
-    jobs = []
-    for p in prompts:
-        for arm in args.arms:
-            for seed in range(1, args.samples + 1):
-                out = args.results / p.stem / arm / f"s{seed}"
-                if (out / "meta.json").exists() and not args.force:
-                    continue
-                jobs.append((p.read_text(), arm, seed, out))
-    print(f"{len(jobs)} generation(s) to run", file=sys.stderr)
-    with cf.ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        futures = {pool.submit(generate, *j, args.rounds): j for j in jobs}
-        for f in cf.as_completed(futures):
-            j = futures[f]
-            r = f.result()
-            print(f"done {j[3].relative_to(args.results)}: "
-                  f"{sum(r['grade']['checks'].values())}/{len(grade.CHECKS)} "
-                  f"${r['meta']['cost_usd']}", file=sys.stderr)
+    # Two passes: bare and kit first, then loop, which continues each kit run.
+    for wave in (("bare", "kit"), ("loop",)):
+        jobs = []
+        for p in prompts:
+            for arm in (a for a in args.arms if a in wave):
+                for seed in range(1, args.samples + 1):
+                    out = args.results / p.stem / arm / f"s{seed}"
+                    if (out / "meta.json").exists() and not args.force:
+                        continue
+                    kit = args.results / p.stem / "kit" / f"s{seed}"
+                    first = kit if arm == "loop" and (kit / "meta.json").exists() else None
+                    jobs.append((p.read_text(), arm, seed, out, args.rounds, first))
+        print(f"{'+'.join(wave)}: {len(jobs)} run(s)", file=sys.stderr, flush=True)
+        with cf.ThreadPoolExecutor(max_workers=args.jobs) as pool:
+            futures = {pool.submit(generate, *j): j for j in jobs}
+            for f in cf.as_completed(futures):
+                j = futures[f]
+                r = f.result()
+                print(f"done {j[3].relative_to(args.results)}: "
+                      f"{sum(r['grade']['checks'].values())}/{len(grade.CHECKS)} "
+                      f"${r['meta']['cost_usd']}", file=sys.stderr, flush=True)
     return grade.main([str(args.results)])
 
 
@@ -208,7 +226,7 @@ def main() -> int:
     e.add_argument("--arms", nargs="+", default=["bare", "kit", "loop"])
     e.add_argument("--samples", type=int, default=3)
     e.add_argument("--rounds", type=int, default=2)
-    e.add_argument("--jobs", type=int, default=3)
+    e.add_argument("--jobs", type=int, default=6)
     e.add_argument("--force", action="store_true", help="regenerate runs that already exist")
     e.set_defaults(fn=cmd_eval)
     args = ap.parse_args()
