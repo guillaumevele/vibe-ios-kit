@@ -1,0 +1,1 @@
+Create an iOS app that shows the latest articles from a JSON feed URL, with pull to refresh and a detail screen.

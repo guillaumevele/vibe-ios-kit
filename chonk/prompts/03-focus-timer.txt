@@ -1,0 +1,1 @@
+Create an iOS focus timer app with an animated countdown ring and a history of past sessions.
