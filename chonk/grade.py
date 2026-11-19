@@ -303,6 +303,8 @@ def table(scores: dict) -> str:
     for c in scores["checks"]:
         cells = [f"{sum(1 for r in runs if r['arm'] == a and r['checks'][c])}/{n[a]}" for a in arms]
         lines.append(f"| `{c}` | " + " | ".join(cells) + " |")
+    cells = [f"{sum(1 for r in runs if r['arm'] == a and all(r['checks'].values()))}/{n[a]}" for a in arms]
+    lines.append(f"| all {len(scores['checks'])} checks | " + " | ".join(cells) + " |")
     for label, key in (("replies cut at the token limit", "truncated"), ("no Swift source in the reply", "no_source")):
         cells = [f"{sum(1 for r in runs if r['arm'] == a and r.get(key))}/{n[a]}" for a in arms]
         lines.append(f"| {label} | " + " | ".join(cells) + " |")

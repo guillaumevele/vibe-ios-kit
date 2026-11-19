@@ -1,0 +1,5 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  ContentView.swift:124:19: error: extra trailing closure passed in call
+- deprecated API: 

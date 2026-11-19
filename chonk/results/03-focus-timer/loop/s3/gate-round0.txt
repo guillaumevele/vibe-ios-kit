@@ -1,0 +1,5 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  AppModel.swift:121:9: error: switch covers known cases, but 'ScenePhase' may have additional unknown values, possibly added in future versions
+- deprecated API: 

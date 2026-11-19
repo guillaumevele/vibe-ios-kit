@@ -1,0 +1,6 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')
+  HistoryView.swift:62:10: error: type '(_) -> Text' cannot conform to 'StringProtocol' [#ProtocolTypeNonConformance]
+- deprecated API: 

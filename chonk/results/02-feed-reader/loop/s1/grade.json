@@ -1,0 +1,59 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": true,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "Article.swift",
+   "ArticleDetailView.swift",
+   "ArticleListView.swift",
+   "FeedApp.swift",
+   "FeedConfiguration.swift",
+   "FeedDTO.swift",
+   "FeedError.swift",
+   "FeedFetching.swift",
+   "FeedStore.swift",
+   "RootView.swift",
+   "Spacing.swift",
+   "URLSessionFeedFetcher.swift"
+  ],
+  "lines": 560,
+  "swift5_errors": [
+   "Article.swift:56:12: error: initializer for conditional binding must have Optional type, not 'Date'",
+   "Article.swift:56:23: error: call can throw, but it is not marked with 'try' and the error is not handled",
+   "Article.swift:61:20: error: call can throw, but it is not marked with 'try' and the error is not handled"
+  ],
+  "swift6_errors": [
+   "Article.swift:56:12: error: initializer for conditional binding must have Optional type, not 'Date'",
+   "Article.swift:56:23: error: call can throw, but it is not marked with 'try' and the error is not handled",
+   "Article.swift:61:20: error: call can throw, but it is not marked with 'try' and the error is not handled"
+  ],
+  "swift5_error_count": 3,
+  "swift6_error_count": 3,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": false,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 8,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}
