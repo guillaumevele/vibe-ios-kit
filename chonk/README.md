@@ -113,6 +113,13 @@ iOS Simulator SDK 27.2, Swift 6.4.2), `git diff` stays empty.
 - **The loop arm is told which rubric checks failed**, so its score on those
   checks is a statement about the gate, not about the model. Its compile
   results are the informative part.
+- **The generated apps are evidence, not vetted code.** They are archived
+  exactly as the model wrote them. An automated security review of this
+  repository flagged one of them (`02-feed-reader/loop/s1`): it renders feed
+  HTML through the `NSAttributedString` HTML importer and opens feed URLs
+  without checking their scheme. The rubric has no security check, and an app
+  can pass all 13 checks with such a flaw. Do not ship anything from
+  `results/` without reading it.
 - **n = 3 per prompt.** These are counts, not rates with error bars.
 - **The rubric and the brief share an author and a list of lessons.** A high
   kit score on the heuristic checks shows the model followed the brief. It
