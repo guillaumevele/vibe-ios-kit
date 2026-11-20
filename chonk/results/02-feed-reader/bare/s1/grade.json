@@ -1,0 +1,54 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": false,
+  "dynamic_type": true,
+  "reduce_motion": false,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "Article.swift",
+   "ArticleDetailView.swift",
+   "ArticleListView.swift",
+   "ArticleRow.swift",
+   "FeedApp.swift",
+   "FeedService.swift",
+   "FeedViewModel.swift",
+   "HTMLRenderer.swift",
+   "String+HTML.swift"
+  ],
+  "lines": 587,
+  "swift5_errors": [
+   "Article.swift:7:8: error: type 'Article' does not conform to protocol 'Encodable'"
+  ],
+  "swift6_errors": [
+   "Article.swift:7:8: error: type 'Article' does not conform to protocol 'Encodable'"
+  ],
+  "swift5_error_count": 1,
+  "swift6_error_count": 1,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [
+   241
+  ],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 7,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

@@ -1,0 +1,51 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": false,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": false,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "Category.swift",
+   "CategorySectionHeader.swift",
+   "ContentView.swift",
+   "GroceryItem.swift",
+   "GroceryListApp.swift",
+   "ItemEditorView.swift",
+   "ItemRow.swift",
+   "ProgressHeaderView.swift"
+  ],
+  "lines": 442,
+  "swift5_errors": [
+   "ContentView.swift:10:9: error: no exact matches in call to initializer "
+  ],
+  "swift6_errors": [
+   "ContentView.swift:10:9: error: no exact matches in call to initializer "
+  ],
+  "swift5_error_count": 1,
+  "swift6_error_count": 1,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": false,
+  "phantom_symbols": [],
+  "symbols_used": 5,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

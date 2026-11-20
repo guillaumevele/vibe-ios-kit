@@ -1,0 +1,24 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  macro expansion @State:9:41: error: cannot find 'ArticleListModel' in scope
+  macro expansion @State:10:26: error: cannot find 'URLSessionFeedService' in scope
+  macro expansion @State:8:39: error: could not infer type for placeholder
+  macro expansion @State:2:9: error: cannot find 'ArticleListModel' in scope
+  macro expansion @State:3:26: error: cannot find 'URLSessionFeedService' in scope
+  FeedReaderApp.swift:11:32: error: cannot find 'ArticleListModel' in scope
+  FeedReaderApp.swift:12:18: error: cannot find 'URLSessionFeedService' in scope
+  macro expansion @State:15:54: error: cannot find 'ArticleListModel' in scope
+  macro expansion @State:16:18: error: cannot find 'URLSessionFeedService' in scope
+  macro expansion @State:20:171: error: cannot find 'ArticleListModel' in scope
+  macro expansion @State:21:18: error: cannot find 'URLSessionFeedService' in scope
+  macro expansion @State:20:138: error: generic parameter 'Value' could not be inferred
+  macro expansion @_StateInitialStoredValue:4:17: error: cannot find 'ArticleListModel' in scope
+  macro expansion @_StateInitialStoredValue:5:34: error: cannot find 'URLSessionFeedService' in scope
+  macro expansion @_StateInitialStoredValue:3:40: error: missing argument label 'initialValue:' in call
+  macro expansion @_StateInitialStoredValue:3:40: error: closure passed to parameter of type 'Value' that does not accept a closure
+  FeedReaderApp.swift:17:13: error: cannot find 'ArticleListView' in scope
+- deprecated API: 
+- no loading state (ProgressView)
+- no empty state (ContentUnavailableView)
+- errors are not caught and stored for display, or try! is used

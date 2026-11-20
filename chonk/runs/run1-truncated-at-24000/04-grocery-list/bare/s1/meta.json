@@ -1,0 +1,25 @@
+{
+ "model": "mistral-large-4",
+ "arm": "bare",
+ "seed": 1,
+ "temperature": 0.7,
+ "reasoning_effort": "high",
+ "max_tokens": 24000,
+ "request": "Create an iOS app for a grocery list with categories, check-off and delete, saved between launches.",
+ "continued_from": null,
+ "api_calls": 1,
+ "prompt_tokens": 109,
+ "completion_tokens": 22109,
+ "finish_reasons": [
+  "stop"
+ ],
+ "cost_usd": 0.0465,
+ "files": [
+  "GroceryListApp.swift",
+  "Models.swift",
+  "SeedData.swift",
+  "ContentView.swift",
+  "CategoryDetailView.swift",
+  "AddCategoryView.swift"
+ ]
+}

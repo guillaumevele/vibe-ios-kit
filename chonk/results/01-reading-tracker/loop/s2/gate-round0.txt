@@ -1,0 +1,5 @@
+The gate ran on your files. Fix every item below and reply with the complete set of files again, in the same format.
+
+Swift 6 compiler errors:
+  AppDesign.swift:13:35: error: type 'AppDesign.Color' has no member 'accentColor'
+- deprecated API: 

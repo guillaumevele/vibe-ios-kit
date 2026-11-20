@@ -6,12 +6,15 @@ KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENTS_DIR="${HOME}/.vibe/agents"
 
 mkdir -p "${AGENTS_DIR}"
-ln -sf "${KIT_DIR}/agents/ios.toml" "${AGENTS_DIR}/ios.toml"
-echo "Linked ${AGENTS_DIR}/ios.toml -> ${KIT_DIR}/agents/ios.toml"
+for agent in ios chonk; do
+  ln -sf "${KIT_DIR}/agents/${agent}.toml" "${AGENTS_DIR}/${agent}.toml"
+  echo "Linked ${AGENTS_DIR}/${agent}.toml -> ${KIT_DIR}/agents/${agent}.toml"
+done
 
 echo
 echo "Use it:"
 echo "  vibe --agent ios"
+echo "  vibe --agent chonk      # same posture, on mistral-large-4"
 echo
 echo "Per project, copy the posture, patterns and templates into the project root:"
 echo "  cp ${KIT_DIR}/AGENTS.md       /path/to/YourApp/AGENTS.md"

@@ -1,0 +1,1 @@
+Create an iOS app for a grocery list with categories, check-off and delete, saved between launches.

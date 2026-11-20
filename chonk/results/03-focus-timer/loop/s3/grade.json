@@ -1,0 +1,55 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": true,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "AppModel.swift",
+   "ContentView.swift",
+   "Design.swift",
+   "FocusSession.swift",
+   "FocusTimerApp.swift",
+   "HistoryView.swift",
+   "SessionRow.swift",
+   "SessionStore.swift",
+   "TimerRingView.swift",
+   "TimerView.swift"
+  ],
+  "lines": 704,
+  "swift5_errors": [
+   "HistoryView.swift:62:10: error: type '(_) -> Text' cannot conform to 'StringProtocol' [#ProtocolTypeNonConformance]",
+   "HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')"
+  ],
+  "swift6_errors": [
+   "HistoryView.swift:62:10: error: type '(_) -> Text' cannot conform to 'StringProtocol' [#ProtocolTypeNonConformance]",
+   "HistoryView.swift:62:15: error: incorrect argument labels in call (have 'item:title:actions:message:', expected '_:item:actions:message:')"
+  ],
+  "swift5_error_count": 2,
+  "swift6_error_count": 2,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": true,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 9,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

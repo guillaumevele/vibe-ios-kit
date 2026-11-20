@@ -1,0 +1,75 @@
+bare+kit: 0 run(s)
+loop: 12 run(s)
+done 02-feed-reader/loop/s2: 13/13 $0.0
+done 01-reading-tracker/loop/s3: 13/13 $0.0748
+done 02-feed-reader/loop/s3: 13/13 $0.0859
+done 02-feed-reader/loop/s1: 10/13 $0.1295
+done 01-reading-tracker/loop/s2: 13/13 $0.1268
+done 03-focus-timer/loop/s2: 13/13 $0.0996
+done 04-grocery-list/loop/s3: 13/13 $0.0
+done 03-focus-timer/loop/s3: 10/13 $0.0847
+done 04-grocery-list/loop/s2: 13/13 $0.0432
+done 03-focus-timer/loop/s1: 13/13 $0.181
+done 04-grocery-list/loop/s1: 13/13 $0.1171
+done 01-reading-tracker/loop/s1: 10/13 $0.2424
+graded 01-reading-tracker/bare/s1: 11/13
+graded 01-reading-tracker/bare/s2: 8/13
+graded 01-reading-tracker/bare/s3: 11/13
+graded 01-reading-tracker/kit/s1: 10/13
+graded 01-reading-tracker/kit/s2: 10/13
+graded 01-reading-tracker/kit/s3: 10/13
+graded 01-reading-tracker/loop/s1: 10/13
+graded 01-reading-tracker/loop/s2: 13/13
+graded 01-reading-tracker/loop/s3: 13/13
+graded 02-feed-reader/bare/s1: 8/13
+graded 02-feed-reader/bare/s2: 9/13
+graded 02-feed-reader/bare/s3: 11/13
+graded 02-feed-reader/kit/s1: 10/13
+graded 02-feed-reader/kit/s2: 13/13
+graded 02-feed-reader/kit/s3: 11/13
+graded 02-feed-reader/loop/s1: 10/13
+graded 02-feed-reader/loop/s2: 13/13
+graded 02-feed-reader/loop/s3: 13/13
+graded 03-focus-timer/bare/s1: 6/13
+graded 03-focus-timer/bare/s2: 6/13
+graded 03-focus-timer/bare/s3: 5/13
+graded 03-focus-timer/kit/s1: 10/13
+graded 03-focus-timer/kit/s2: 10/13
+graded 03-focus-timer/kit/s3: 10/13
+graded 03-focus-timer/loop/s1: 13/13
+graded 03-focus-timer/loop/s2: 13/13
+graded 03-focus-timer/loop/s3: 10/13
+graded 04-grocery-list/bare/s1: 10/13
+graded 04-grocery-list/bare/s2: 10/13
+graded 04-grocery-list/bare/s3: 8/13
+graded 04-grocery-list/kit/s1: 10/13
+graded 04-grocery-list/kit/s2: 10/13
+graded 04-grocery-list/kit/s3: 13/13
+graded 04-grocery-list/loop/s1: 13/13
+graded 04-grocery-list/loop/s2: 13/13
+graded 04-grocery-list/loop/s3: 13/13
+| check | bare (n=12) | kit (n=12) | loop (n=12) |
+|---|---|---|---|
+| `compiles_swift5` | 6/12 | 2/12 | 9/12 |
+| `compiles_swift6` | 5/12 | 3/12 | 9/12 |
+| `no_deprecation_warnings` | 6/12 | 2/12 | 9/12 |
+| `no_legacy_api` | 11/12 | 12/12 | 12/12 |
+| `icon_buttons_labelled` | 8/12 | 12/12 | 12/12 |
+| `dynamic_type` | 6/12 | 12/12 | 12/12 |
+| `reduce_motion` | 4/12 | 12/12 | 12/12 |
+| `loading_state` | 6/12 | 12/12 | 12/12 |
+| `empty_state` | 12/12 | 12/12 | 12/12 |
+| `error_state` | 4/12 | 12/12 | 12/12 |
+| `bounded_animation` | 12/12 | 12/12 | 12/12 |
+| `sf_symbols_exist` | 11/12 | 12/12 | 12/12 |
+| `no_emoji` | 12/12 | 12/12 | 12/12 |
+| replies cut at the token limit | 0/12 | 0/12 | 0/12 |
+| no Swift source in the reply | 0/12 | 0/12 | 0/12 |
+
+| prompt | bare: checks passed, mean of 13 | kit: checks passed, mean of 13 | loop: checks passed, mean of 13 |
+|---|---|---|---|
+| 01-reading-tracker | 10.0 | 10.0 | 12.0 |
+| 02-feed-reader | 9.3 | 11.3 | 12.0 |
+| 03-focus-timer | 5.7 | 10.0 | 12.0 |
+| 04-grocery-list | 9.3 | 11.0 | 13.0 |
+

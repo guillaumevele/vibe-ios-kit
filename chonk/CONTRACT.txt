@@ -1,0 +1,1 @@
+Target iOS 26 with SwiftUI. Use only Apple frameworks, no third-party packages. Reply with the complete source of the app: put each file in its own ```swift fenced block, and make the first line of each block a comment of the form `// FILE: Name.swift`. Do not include tests, asset catalogs or project files.

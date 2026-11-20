@@ -1,0 +1,54 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": true,
+  "loading_state": true,
+  "empty_state": true,
+  "error_state": true,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "GroceryListApp.swift",
+   "GroceryListView.swift",
+   "GroceryListViewModel.swift",
+   "GroceryStore.swift",
+   "Models.swift"
+  ],
+  "lines": 429,
+  "swift5_errors": [
+   "GroceryListView.swift:29:21: error: cannot find 'AddItemView' in scope",
+   "GroceryListView.swift:31:18: error: instance method 'alert(_:item:actions:message:)' requires that 'Text' conform to 'StringProtocol'",
+   "GroceryListView.swift:83:37: error: cannot find 'Spacing' in scope",
+   "GroceryListView.swift:98:25: error: cannot find 'GroceryRow' in scope"
+  ],
+  "swift6_errors": [
+   "GroceryListView.swift:29:21: error: cannot find 'AddItemView' in scope",
+   "GroceryListView.swift:31:18: error: instance method 'alert(_:item:actions:message:)' requires that 'Text' conform to 'StringProtocol'",
+   "GroceryListView.swift:83:37: error: cannot find 'Spacing' in scope",
+   "GroceryListView.swift:98:25: error: cannot find 'GroceryRow' in scope"
+  ],
+  "swift5_error_count": 4,
+  "swift6_error_count": 4,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": false,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": true,
+  "phantom_symbols": [],
+  "symbols_used": 4,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "no_source": true,
+ "checks": {
+  "compiles_swift5": false,
+  "compiles_swift6": false,
+  "no_deprecation_warnings": false,
+  "no_legacy_api": false,
+  "icon_buttons_labelled": false,
+  "dynamic_type": false,
+  "reduce_motion": false,
+  "loading_state": false,
+  "empty_state": false,
+  "error_state": false,
+  "bounded_animation": false,
+  "sf_symbols_exist": false,
+  "no_emoji": false
+ },
+ "details": {}
+}

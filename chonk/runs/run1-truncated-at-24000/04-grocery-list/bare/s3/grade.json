@@ -1,0 +1,45 @@
+{
+ "no_source": false,
+ "checks": {
+  "compiles_swift5": true,
+  "compiles_swift6": true,
+  "no_deprecation_warnings": true,
+  "no_legacy_api": true,
+  "icon_buttons_labelled": true,
+  "dynamic_type": true,
+  "reduce_motion": false,
+  "loading_state": false,
+  "empty_state": true,
+  "error_state": false,
+  "bounded_animation": true,
+  "sf_symbols_exist": true,
+  "no_emoji": true
+ },
+ "details": {
+  "files": [
+   "AddItemView.swift",
+   "CategoryManagerView.swift",
+   "ContentView.swift",
+   "GroceryListApp.swift",
+   "ItemRow.swift",
+   "Models.swift"
+  ],
+  "lines": 390,
+  "swift5_errors": [],
+  "swift6_errors": [],
+  "swift5_error_count": 0,
+  "swift6_error_count": 0,
+  "deprecations": [],
+  "legacy_api": [],
+  "unlabelled_icon_button_lines": [],
+  "fixed_font_sizes": 0,
+  "animates": true,
+  "reads_reduce_motion": false,
+  "force_try": 0,
+  "catch_stores_error": false,
+  "phantom_symbols": [],
+  "symbols_used": 4,
+  "ungated_animation": [],
+  "emoji": []
+ }
+}

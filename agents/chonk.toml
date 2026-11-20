@@ -1,0 +1,28 @@
+# vibe custom agent: the iOS Builder on Mistral Large 4 ("Le Chonk").
+# Install: ./install.sh links this file into ~/.vibe/agents/chonk.toml
+# Use:     vibe --agent chonk
+#
+# Same posture as agents/ios.toml (AGENTS.md at the project root is loaded by
+# vibe itself). The one difference is the model: this profile switches the
+# session to mistral-large-4 without touching your ~/.vibe/config.toml.
+
+display_name = "Chonk iOS Builder"
+description = "Build iOS 26/27 apps with Mistral Large 4: SwiftUI, Swift 6 strict concurrency, every screen with its loading, empty and failed states, proved on a real build."
+safety = "neutral"
+agent_type = "agent"
+
+active_model = "le-chonk"
+
+[[models]]
+name = "mistral-large-4"
+provider = "mistral"
+alias = "le-chonk"
+temperature = 0.7
+input_price = 0.7
+output_price = 2.1
+thinking = "high"
+supports_images = true
+auto_compact_threshold = 200000
+
+[tools.bash]
+default_timeout = 1200

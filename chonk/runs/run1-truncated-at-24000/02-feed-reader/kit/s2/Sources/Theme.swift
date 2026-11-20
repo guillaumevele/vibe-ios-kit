@@ -1,0 +1,14 @@
+// FILE: Theme.swift
+import SwiftUI
+
+enum Theme {
+    /// The single accent color used across the app.
+    static let accent = Color.blue
+}
+
+enum Spacing {
+    static let xSmall: CGFloat = 4
+    static let small: CGFloat = 8
+    static let medium: CGFloat = 16
+    static let large: CGFloat = 24
+}
