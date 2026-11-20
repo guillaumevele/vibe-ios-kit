@@ -19,11 +19,11 @@ agent_type = "agent"
 default_timeout = 1200
 
 # Bounded Swift edits as a first-class tool the agent invokes itself. Requires
-# `pip install "vibe-fim[mcp]"` (install.sh does this); vibe-fim-mcp must be on
+# `pip install "vibe-fim[mcp]"` (`install.sh` only prints this reminder); vibe-fim-mcp must be on
 # PATH. The agent computes anchors and calls surgical_patch instead of rewriting
 # a working .swift file. See skills/ios-surgical-edit.md.
 [[mcp_servers]]
 name = "vibe-fim"
 transport = "stdio"
 command = "vibe-fim-mcp"
-prompt = "Prefer surgical_patch for editing a Swift file that already compiles: it rewrites ONLY the region between two unique anchors via Codestral FIM, keeps the prefix/suffix byte-identical, and rejects the edit if the file no longer parses."
+prompt = "Prefer surgical_patch for editing a Swift file that already compiles: it rewrites ONLY the region between two unique anchors via Codestral FIM and keeps the prefix/suffix byte-identical. For Swift, parses:null means syntax was not checked; require swiftc -frontend -parse plus the target's real xcodebuild build/test command before accepting the patch."

@@ -21,13 +21,13 @@ looks intentional. Everything below is a hard rule unless the human overrides it
   the gate (e.g. "needs an Xcode build", "needs a device soak"). Do not imply it
   was verified.
 
-## 1. CPU budget — the runaway class (most common production bug)
+## 1. CPU budget — the runaway animation class
 
-A single unguarded animation can pin a core and drain the battery. This is the
-**single most-violated rule in real code**: across 36 `TimelineView` shader files
-mined from 67 production sample projects, exactly **1** used `scenePhase`, **0**
-used `isLowPowerModeEnabled`, **0** used `accessibilityReduceMotion`
-(see `PATTERNS.md`). These are **banned** unless explicitly gated:
+A single unguarded animation can pin a core and drain the battery. An internal
+review corpus repeatedly surfaced missing lifecycle and accessibility guards;
+the corpus and aggregate counts are not public, so treat this as an operational
+rule rather than a reproducible benchmark (see `PATTERNS.md`). These are
+**banned** unless explicitly gated:
 
 - `TimelineView(.animation)` driving work every frame with no stop condition.
 - `.repeatForever(autoreverses:)` that is not tied to `isEnabled` / visibility.
@@ -104,10 +104,11 @@ rest, it is a bug, not a polish item.
 A change is done when: it builds, it runs, the CPU-at-rest gate passes, reduced
 motion is handled, there are no emoji, and you have stated the proof you saw.
 
-## 9. On-device AI & iOS 26 system UI (corpus-validated)
+## 9. On-device AI & iOS 26 system UI (review-informed)
 
-Non-negotiables distilled from 67 real projects. Deeper, attributed techniques
-with examples live in **`PATTERNS.md`** — consult it before building any of these.
+These non-negotiables were curated from an internal review corpus whose raw
+inventory is not public. Deeper techniques with examples and attribution where
+available live in **`PATTERNS.md`** — consult it before building any of these.
 
 - **FoundationModels is the privacy-aligned default.** Inference stays on-device;
   treat `SystemLanguageModel.default.availability` as a *product state* (branch

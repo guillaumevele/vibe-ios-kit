@@ -28,20 +28,28 @@ The tool returns the unified diff **and** a scope report, so you see the proof,
 not just a success flag:
 
 ```
-[BOUNDED + PARSES] edit confined between anchors.
+[BOUNDED] edit confined between anchors; Swift parse not checked.
   frozen prefix: 812 chars (unchanged)
   frozen suffix: 1043 chars (unchanged)
   region: 240 chars -> 287 chars
 ```
 
 Because the prefix and suffix are sent verbatim and never regenerated, the edit
-cannot leak into the rest of the file — and it is rejected if the result no
-longer parses. Review the diff, then re-issue with `dry_run = false` (vibe's
-tool-permission gate authorises the write — autonomy means you *propose the
-bounded patch with proof*, the human/permission layer approves it, per
-`AGENTS.md` proof-not-vibes).
+cannot leak into the rest of the file. For Swift, `vibe-fim` currently proves
+byte-bounded scope but does not perform syntax or type validation
+(`parses: null`). Review the dry-run diff and scope report. If the proposal is
+acceptable, apply it with `dry_run = false`, then immediately run
+`swiftc -frontend -parse` and the target's real `xcodebuild` build/test command.
+Accept the patch only when those checks pass; otherwise reverse the returned
+bounded diff rather than restoring the whole file.
 
-Setup (also done by `install.sh`):
+```bash
+xcrun swiftc -frontend -parse Sources/ScanView.swift
+xcodebuild -scheme YourApp -destination 'generic/platform=iOS Simulator' build
+# Then run the repository's real test command on an installed destination.
+```
+
+Setup (`install.sh` prints this command but does not run it):
 
 ```bash
 pip install "vibe-fim[mcp]"   # provides vibe-fim-mcp, wired in agents/ios.toml
